@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Technische Natuurkunde</title>
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<header class="subpage-header">
+  <a href="index.html" class="back-link">
+    <img src="images/icons/left_arrow.svg"
+         class="back-icon"
+         alt=""
+         width="26"
+         height="26">
+    <span>Dashboard</span>
+  </a>
+</header>
+
+<main class="info-page">
+
+  <section class="info-card">
+    <h2>Stage-dashboard</h2>
+    <p>
+      Overzicht van beschikbare opdrachten, bedrijven en domeinen.
+    </p>
+  </section>
+
+  <section class="dashboard-grid">
+
+    <article class="dashboard-card">
+      <h3>Aantal opdrachten per bedrijf</h3>
+      <canvas id="bedrijvenChart"></canvas>
+    </article>
+
+  </section>
+
+</main>
+
+<footer>
+  <div class="footer-section">
+    <h3>Feedback</h3>
+    <p>
+      Klopt er iets niet?
+      Laat het weten via <a href="mailto:j.busink@hva.nl">Neem contact op</a>.
+    </p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/data-dashboard.js"></script>
+
+</body>
+</html>

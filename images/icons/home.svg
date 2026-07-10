@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   id="svg2"
+   sodipodi:docname="home.svg"
+   viewBox="0 0 100.26313 94.855594"
+   sodipodi:version="0.32"
+   version="1.0"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"
+   inkscape:version="1.4 (86a8ad7, 2024-10-11)"
+   width="100.26313"
+   height="94.855591"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     fit-margin-left="0"
+     inkscape:zoom="2.8284272"
+     borderopacity="1.0"
+     inkscape:current-layer="g2986"
+     inkscape:cx="70.003569"
+     inkscape:cy="66.114482"
+     inkscape:window-maximized="1"
+     showgrid="false"
+     fit-margin-right="0"
+     inkscape:document-units="px"
+     bordercolor="#666666"
+     inkscape:window-x="-6"
+     guidetolerance="10"
+     objecttolerance="10"
+     inkscape:window-y="-6"
+     fit-margin-bottom="0"
+     inkscape:window-width="1128"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     pagecolor="#ffffff"
+     gridtolerance="10000"
+     inkscape:window-height="682"
+     fit-margin-top="0"
+     inkscape:showpageshadow="2"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1">
+    <inkscape:page
+       x="0"
+       y="0"
+       width="100.26313"
+       height="94.855591"
+       id="page1"
+       margin="0"
+       bleed="0" />
+  </sodipodi:namedview>
+  <g
+     id="layer1"
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     transform="translate(-1701.2616,-3243.4152)">
+    <g
+       id="g2986"
+       style="fill:#1f264f;fill-opacity:1"
+       transform="matrix(-0.36867,0,0,0.36867,213.81187,456.72)">
+      <g
+         id="g2"
+         style="fill:#89a1d8;fill-opacity:1"
+         transform="translate(-4450.0763,7204.4094)">
+        <path
+           id="rect2391"
+           d="m 374.94,485.16 z m 0,0 -95.449,-84.53 -95.504,84.567 v 120.84 c 0,3.1208 2.5218,5.6243 5.6427,5.6243 h 59.688 v -52.982 c 0,-3.1208 2.5035,-5.6427 5.6243,-5.6427 h 49.044 c 3.1208,0 5.6243,2.5218 5.6243,5.6427 v 52.982 h 59.706 c 3.1208,0 5.6244,-2.5035 5.6244,-5.6243 v -120.88 z m -190.95,0.0366 z"
+           sodipodi:nodetypes="cccccccccccccccccc"
+           style="fill:#89a1d8;fill-opacity:1"
+           inkscape:connector-curvature="0" />
+        <path
+           id="path2399"
+           d="m 278.93,354.37 -135.45,119.94 14.268,16.097 121.74,-107.8 121.71,107.8 14.241,-16.097 -135.42,-119.94 -0.5264,0.60952 -0.55411,-0.60952 z"
+           style="fill:#89a1d8;fill-opacity:1"
+           inkscape:connector-curvature="0" />
+        <path
+           id="rect2404"
+           d="m 183.98,371.63 h 34.338 l -0.29922,36.37251 -34.038,54.99336 V 371.63 Z"
+           sodipodi:nodetypes="ccccc"
+           style="fill:#89a1d8;fill-opacity:1;stroke-width:1.33731"
+           inkscape:connector-curvature="0" />
+      </g>
+    </g>
+  </g>
+  <metadata
+     id="metadata1">
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/publicdomain/" />
+        <dc:publisher>
+          <cc:Agent
+             rdf:about="http://openclipart.org/">
+            <dc:title>Openclipart</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:date>2010-12-13T05:02:39</dc:date>
+        <dc:description />
+        <dc:source>https://openclipart.org/detail/100447/home-icon-by-jphandrigan</dc:source>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>jphandrigan</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>Icon</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/publicdomain/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+</svg>

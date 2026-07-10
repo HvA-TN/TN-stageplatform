@@ -1,11 +1,23 @@
 (() => {
   const darkToggle = document.getElementById('darkToggle');
+  const themeIcon = document.getElementById('themeIcon');
+
+  function updateThemeIcon(theme) {
+    if (!themeIcon) return;
+
+    themeIcon.src =
+      theme === 'dark'
+        ? 'images/icons/darkmode.svg'
+        : 'images/icons/lightmode.svg';
+  }
 
   function pasThemaToe(theme) {
     const isDark = theme === 'dark';
 
     document.body.classList.toggle('dark-mode', isDark);
     document.body.classList.toggle('light-mode', !isDark);
+
+    updateThemeIcon(theme);
   }
 
   function huidigThema() {

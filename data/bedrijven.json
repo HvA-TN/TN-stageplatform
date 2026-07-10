@@ -107,7 +107,7 @@
     "type": ["onderzoek"],
     "tags": ["High-tech systemen & materialen", "Energie & duurzaamheid"],
     "beschrijving": "Fundamenteel onderzoek in fotonica, nanofysica en soft matter.",
-    "website": "https://amolf.nl/jobs-amolfl-scientific-internship"
+    "website": "https://amolf.nl/jobs-amolf-scientific-internship"
   },
   {
     "naam": "ARCNL",
@@ -1013,7 +1013,7 @@
   {
     "naam": "ITER Organization",
     "plaats": "Saint-Paul-lès-Durance",
-    "provincie": "Provence-Alpes-Côte d'Azur",
+    "provincie": "Buiten Nederland",
     "lat": 43.7098,
     "lng": 5.7633,
     "type": ["onderzoek"],
@@ -1060,7 +1060,7 @@
     "provincie": "Utrecht",
     "lat": 52.0525,
     "lng": 5.2806,
-    "type": ["onderzoek", "overheid"],
+    "type": ["onderzoek"],
     "tags": ["Data & digitalisering", "Veiligheid & defensie"],
     "beschrijving": "Forensisch onderzoek en technologische ondersteuning bij opsporing, inclusief data-analyse, sensortechnologie en beeldverwerking.",
     "website": "https://kombijde.politie.nl/vakgebieden/stage/intro"
@@ -1223,5 +1223,193 @@
       "url": "https://immunologyamsterdam.org/core-facilities/#mccf"
     }
   ]
+},{
+  "naam": "Holland Sensor",
+  "plaats": "Driebergen-Rijsenburg",
+  "provincie": "Utrecht",
+  "lat": 52.05635420348543,
+  "lng": 5.265197467862703,
+  "type": ["bedrijf"],
+  "tags": [
+    "High-tech systemen & materialen",
+    "Data & digitalisering",
+    "Energie & duurzaamheid"
+  ],
+  "beschrijving": "Ontwikkelt sensortechnologie voor real-time metaalmonitoring in industrieel water. De technologie is gebaseerd op boron-doped diamond-elektrodes, elektrochemische detectie, embedded elektronica en cloudgebaseerde data-analyse.",
+  "website": "https://hollandsensor.com/"
+},
+{
+  "naam": "JDE Peet’s",
+  "plaats": "Amsterdam",
+  "provincie": "Noord-Holland",
+  "lat": 52.3946,
+  "lng": 4.8552,
+  "type": ["bedrijf"],
+  "tags": [
+    "High-tech systemen & materialen",
+    "Data & digitalisering",
+    "Energie & duurzaamheid"
+  ],
+  "beschrijving": "Internationale producent van koffie- en theesystemen. Werkt aan procesoptimalisatie, automatisering, sensortechnologie, data-analyse en duurzame productie binnen grootschalige industriële voedselprocessen.",
+  "website": "https://www.jdepeets.com"
+},{
+  "naam": "Universiteit Utrecht – Natuurkunde",
+  "plaats": "Utrecht",
+  "provincie": "Utrecht",
+  "lat": 52.0853,
+  "lng": 5.1730,
+  "type": ["onderzoek"],
+  "tags": [
+    "High-tech systemen & materialen",
+    "Data & digitalisering",
+    "Energie & duurzaamheid",
+    "Aarde, klimaat & ruimte",
+    "Gezondheid & medische technologie"
+  ],
+  "beschrijving": "Onderzoek en onderwijs binnen de natuurkunde aan de Universiteit Utrecht, waaronder nanomaterialen, klimaatfysica, theoretische fysica, biophysics, plasmafysica, quantumtechnologie, astrofysica en complexe systemen.",
+  "websites": [
+    {
+      "naam": "Department of Physics",
+      "url": "https://www.uu.nl/en/organisation/faculty-of-science/physics"
+    },
+    {
+      "naam": "Debye Institute for Nanomaterials Science",
+      "url": "https://www.uu.nl/en/research/debye-institute-for-nanomaterials-science"
+    },
+    {
+      "naam": "Institute for Marine and Atmospheric Research Utrecht (IMAU)",
+      "url": "https://www.uu.nl/en/research/imau"
+    },
+    {
+      "naam": "Institute for Gravitational and Subatomic Physics (GRASP)",
+      "url": "https://www.uu.nl/en/research/grasp"
+    },
+    {
+      "naam": "Soft Condensed Matter & Biophysics",
+      "url": "https://www.uu.nl/en/research/soft-condensed-matter-and-biophysics"
+    }
+  ]
+},
+{
+  "naam": "Intero Integrity",
+  "plaats": "Tricht",
+  "provincie": "Gelderland",
+  "lat": 51.9288,
+  "lng": 5.2680,
+  "type": ["bedrijf"],
+  "tags": [
+    "High-tech systemen & materialen",
+    "Data & digitalisering",
+    "Energie & duurzaamheid"
+  ],
+  "beschrijving": "Internationaal technologie- en ingenieursbedrijf gespecialiseerd in inspectie, monitoring en integriteitsbeheer van kritische infrastructuur. Ontwikkelt en gebruikt geavanceerde sensortechnologie, niet-destructieve meetmethoden, inspectierobots en data-analyse voor leidingen, industriële installaties en energie-infrastructuur.",
+  "website": "https://www.intero-integrity.com"
+},
+{
+  "naam": "Zetadec",
+  "plaats": "Wageningen",
+  "provincie": "Gelderland",
+  "lat": 51.9692,
+  "lng": 5.6654,
+  "type": ["bedrijf"],
+  "tags": [
+    "Data & digitalisering",
+    "Energie & duurzaamheid",
+    "High-tech systemen & materialen"
+  ],
+  "beschrijving": "Onafhankelijke R&D- en consultancyorganisatie gespecialiseerd in procesontwikkeling, modellering en data-analyse voor de voedingsmiddelen-, biomassa- en kunstmestindustrie. Werkt aan experimenteel onderzoek, statistische analyse, sensortechnologie, spectroscopie, procesoptimalisatie en de ontwikkeling van voorspellende modellen voor industriële productieprocessen.",
+  "website": "https://www.zetadec.com"
+},
+  {
+    "naam": "Unilever Foods Innovation Centre - Hive",
+    "plaats": "Wageningen",
+    "provincie": "Gelderland",
+    "lat": 51.9867,
+    "lng": 5.6626,
+    "type": ["bedrijf"],
+    "tags": [
+      "High-tech systemen & materialen",
+      "Data & digitalisering",
+      "Energie & duurzaamheid",
+      "Gezondheid & medische technologie"
+    ],
+    "beschrijving": "Internationaal R&D-centrum van Unilever gericht op voedingsmiddeleninnovatie. Werkt aan procestechnologie, sensortechnologie, automatisering, materiaalonderzoek, data-analyse en duurzame productontwikkeling.",
+    "website": "https://www.unilever.com"
+  },
+  {
+    "naam": "FrieslandCampina Research & Development",
+    "plaats": "Wageningen",
+    "provincie": "Gelderland",
+    "lat": 51.9860,
+    "lng": 5.6637,
+    "type": ["bedrijf"],
+    "tags": [
+      "High-tech systemen & materialen",
+      "Data & digitalisering",
+      "Energie & duurzaamheid",
+      "Gezondheid & medische technologie"
+    ],
+    "beschrijving": "Onderzoeks- en ontwikkelingscentrum van FrieslandCampina. Actief op het gebied van procestechnologie, sensoren, optische meetmethoden, data-analyse, modellering en duurzame voedingsinnovatie.",
+    "website": "https://www.frieslandcampina.com"
+  },
+  {
+    "naam": "KeyGene",
+    "plaats": "Wageningen",
+    "provincie": "Gelderland",
+    "lat": 51.9858,
+    "lng": 5.6647,
+    "type": ["bedrijf"],
+    "tags": [
+      "Data & digitalisering",
+      "Gezondheid & medische technologie",
+      "High-tech systemen & materialen"
+    ],
+    "beschrijving": "Biotechnologiebedrijf gespecialiseerd in plantenveredeling, genomica, beeldanalyse en automatisering. Ontwikkelt geavanceerde meet- en analysetechnieken voor genetisch onderzoek en landbouwinnovatie.",
+    "website": "https://www.keygene.com"
+  },
+  {
+    "naam": "Yili Innovation Center Europe",
+    "plaats": "Wageningen",
+    "provincie": "Gelderland",
+    "lat": 51.9864,
+    "lng": 5.6620,
+    "type": ["bedrijf"],
+    "tags": [
+      "Data & digitalisering",
+      "Gezondheid & medische technologie",
+      "Energie & duurzaamheid"
+    ],
+    "beschrijving": "Europees onderzoeks- en innovatiecentrum van Yili. Richt zich op voedingsmiddelenonderzoek, analysetechnieken, procestechnologie, productontwikkeling en datagedreven kwaliteitscontrole.",
+    "website": "https://www.yili.com"
+  },
+  {
+    "naam": "Ceradis",
+    "plaats": "Wageningen",
+    "provincie": "Gelderland",
+    "lat": 51.9850,
+    "lng": 5.6610,
+    "type": ["bedrijf"],
+    "tags": [
+      "Gezondheid & medische technologie",
+      "Energie & duurzaamheid",
+      "High-tech systemen & materialen"
+    ],
+    "beschrijving": "Innovatief agritechbedrijf dat duurzame gewasbeschermingsmiddelen ontwikkelt. Werkzaam op het gebied van formuleringstechnologie, analytische chemie, procestechnologie en duurzame landbouw.",
+    "website": "https://www.ceradis.com"
+  },
+  {
+  "naam": "VDL MPC",
+  "plaats": "Amersfoort",
+  "provincie": "Utrecht",
+  "lat": 52.1567,
+  "lng": 5.3872,
+  "type": ["bedrijf"],
+  "tags": [
+    "High-tech systemen & materialen",
+    "Veiligheid & defensie",
+    "Gezondheid & medische technologie"
+  ],
+  "beschrijving": "High-tech maakbedrijf binnen de VDL Groep gespecialiseerd in productie, prototyping en assemblage van complexe mechanische componenten, modules en plaatwerk. Actief als toeleverancier voor de semiconductor-, medische, defensie- en machinebouwsector. Werkzaam op het gebied van precisietechniek, cleanroomassemblage, CNC-bewerking, robotisering en geavanceerde productietechnologie.",
+  "website": "https://www.vdlmpc.com"
 }
 ]

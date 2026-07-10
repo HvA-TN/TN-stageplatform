@@ -117,6 +117,7 @@ function toonInfoView() {
   showInfoBtn.classList.add('active');
 }
 
+
 /* =========================
    SIDEPANEL
    ========================= */
@@ -398,7 +399,7 @@ function vulProvincieFilterOpties(bedrijven) {
     bedrijven.map((bedrijf) => bedrijf.provincie).filter(Boolean)
   )].sort((a, b) => a.localeCompare(b, 'nl'));
 
-  provincieFilter.innerHTML = '<option value="alles">Alle provincies</option>';
+  provincieFilter.innerHTML = '<option value="alles">Alles</option>';
 
   uniekeProvincies.forEach((provincie) => {
     const option = document.createElement('option');
@@ -798,3 +799,4 @@ function aantalKliksVoorBedrijf(bedrijf) {
   const stats = haalKlikStatsOp();
   return stats[bedrijf.naam] || 0;
 }
+

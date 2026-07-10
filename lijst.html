@@ -1,85 +1,106 @@
 <!DOCTYPE html>
 <html lang="nl">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Stagebedrijven per domein - Technische Natuurkunde</title>
+  <title>Stagebedrijven - Technische Natuurkunde</title>
+
   <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
 
-  <header class="topbar">
-    <div class="topbar-inner">
+<header class="subpage-header">
 
-      <button id="darkToggle" class="dark-toggle" type="button" aria-label="Toggle dark mode">
-        <img src="images/icons/darkmode.svg" alt="Toggle dark mode" width="30" height="30">
+  <a href="index.html" class="back-link">
+    <img src="images/icons/left_arrow.svg"
+         class="back-icon"
+         alt=""
+         width="26"
+         height="26">
+
+    <span>Lijst</span>
+  </a>
+
+</header>
+
+<main class="info-page">
+
+  <section class="info-card search-card">
+
+    <div class="search-header">
+      <h2>Zoeken</h2>
+      <p>Zoek op naam, plaats, provincie, type, domein of beschrijving.</p>
+    </div>
+
+    <div class="search-row">
+
+      <input
+        type="text"
+        id="zoekInput"
+        class="search-input"
+        placeholder="Bijvoorbeeld: Amsterdam, fotonica, energie..."
+        autocomplete="off"
+      >
+
+      <select id="provincieFilter" class="search-select">
+        <option value="">Alle regios</option>
+      </select>
+
+      <button id="resetZoekopdracht"
+              class="search-reset-button"
+              type="button">
+        Wissen
       </button>
 
-      <div class="topbar-text">
-        <h1>Stage-informatie Technische Natuurkunde</h1>
-        <p>Algemene informatie over het zoeken en uitvoeren van een stage</p>
-      </div>
-
-      <nav class="page-tabs">
-        <a href="index.html" class="tab-button">
-          <img src="images/icons/information.svg" class="tab-icon" alt="" width="30" height="30">
-          <span>Info</span>
-        </a>
-        <a href="map.html" class="tab-button">
-          <img src="images/icons/map.svg" class="tab-icon" alt="" width="30" height="30">
-          <span>Kaart</span>
-        </a>
-        <a href="lijst.html" class="tab-button active">
-          <img src="images/icons/list.svg" class="tab-icon" alt="" width="30" height="30">
-          <span>Lijst</span>
-        </a>
-      </nav>
-
     </div>
-  </header>
 
+  </section>
 
-  <main class="info-page">
-    <section class="info-card search-card">
-      <div class="search-header">
-        <h2>Zoeken</h2>
-        <p>Zoek op naam, plaats, provincie, beschrijving, type of domein.</p>
-      </div>
+  <section id="zoekStatus"
+           class="search-status"
+           aria-live="polite"></section>
 
-      <div class="search-row">
-        <input
-          type="text"
-          id="zoekInput"
-          class="search-input"
-          placeholder="Bijvoorbeeld: Amsterdam, fotonica, energie..."
-          autocomplete="off"
-        >
+  <section id="domeinLijst"
+           class="accordion"></section>
 
-        <select id="provincieFilter" class="search-select">
-          <option value="">Alle provincies</option>
-        </select>
+</main>
 
-        <button id="resetZoekopdracht" class="search-reset-button" type="button">
-          Wissen
-        </button>
-      </div>
-    </section>
+  <!-- <section class="info-card">
 
-    <section id="zoekStatus" class="search-status" aria-live="polite"></section>
-    <section id="domeinLijst" class="accordion"></section>
-  </main>
+    <h2>Openstaande opdrachten</h2>
+
+    <p>
+      Op zoek naar een concrete stage- of afstudeeropdracht?
+      Bekijk dan de opdrachtenpagina.
+    </p>
+
+    <div class="company-list-links">
+      <a href="opdrachten.html">
+        Bekijk openstaande opdrachten
+      </a>
+    </div>
+
+  </section> -->
 
 <footer>
+
   <div class="footer-section">
     <h3>Feedback</h3>
+
     <p>
-      Mis je een bedrijf of klopt er iets niet?
-      Laat het weten via <a href="mailto:j.busink@hva.nl">Neem contact op</a>.
+      Mis je een bedrijf of opdracht, of klopt er iets niet?
+      Laat het weten via
+      <a href="mailto:j.busink@hva.nl">Neem contact op</a>.
     </p>
   </div>
+
 </footer>
-<script src="js/lijst.js"></script>
+
 <script src="js/theme.js"></script>
+<script src="js/lijst.js"></script>
 
 </body>
-</html> 
+
+</html>

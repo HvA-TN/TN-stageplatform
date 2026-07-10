@@ -1,0 +1,15 @@
+[ 
+    {
+        "titel": "Project title",
+        "bedrijf": "Bedrijf of Universiteitsnaam",
+        "locatie": "Een Nederlands dorp",
+        "type": "Stage/Afstuderen",
+        "periode": "~September",
+        "domein": ["High-tech systemen & materialen","Gezondheid & medische technologie"],
+        "keywords": ["Keyword 1", "Keyword 2", "Keyword 3", "Keyword 4", "Keyword 5"],
+        "beschrijving": "Hier kan een willekeurige samenvatting staan van ongeveer vijf regels. Het doel van het project moet worden uitgelegd en ook een beetje context helpt hierbij. ",
+        "contact": "J.busink@hva.nl",
+        "status": "closed"
+    }
+]
+
