@@ -55,7 +55,9 @@ function toonOpdrachten(opdrachten) {
             </div>
 
             <div class="assignment-meta-item">
-                <strong>Contact:</strong><br>
+                <strong>Neem contact op met docent:</strong><br>
+                <a href="${o.docent}" target="_blank" rel="noopener noreferrer" style="text-decoration: none;">
+                ${o.docent} <br>
                 <a href="${o.contact}" target="_blank" rel="noopener noreferrer">
                     ${o.contact}
                 </a>

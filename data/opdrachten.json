@@ -9,7 +9,34 @@
         "keywords": ["Keyword 1", "Keyword 2", "Keyword 3", "Keyword 4", "Keyword 5"],
         "beschrijving": "Hier kan een willekeurige samenvatting staan van ongeveer vijf regels. Het doel van het project moet worden uitgelegd en ook een beetje context helpt hierbij. ",
         "contact": "J.busink@hva.nl",
+        "docent" : "Joris Busink",
         "status": "closed"
-    }
+    },
+{
+    "titel": "Development of a Novel MAS Controller",
+    "bedrijf": "Radboud University - Magnetic Resonance Research Center",
+    "locatie": "Nijmegen",
+    "type": "Stage/Afstuderen",
+    "periode": "In overleg",
+    "domein": ["High-tech systemen & materialen"],
+    "keywords": ["NMR", "Control systems", "Arduino / Raspberry Pi", "Fiber-optic sensing", "Electronics"],
+    "beschrijving": "Develop a new automated Magic Angle Spinning (MAS) controller for NMR experiments. The controller regulates nitrogen gas flows that pneumatically drive and support a ceramic sample rotor at rotational speeds of up to 150 kHz. Rotor speed is measured using a fiber-optic detection system. The new controller should support both manual operation and automatic closed-loop speed control, provide a TTL tachometer output and communicate with the NMR spectrometer. An Arduino or Raspberry Pi will be integrated to control electronic flow regulators and provide a flexible platform for future modifications and extensions.",
+    "contact": "Y.L.A.rezus@hva.nl",
+    "docent" : "Yves Rezus",
+    "status": "open"
+},
+{
+    "titel": "Optimizing NQR Detection",
+    "bedrijf": "Radboud University - Magnetic Resonance Research Center",
+    "locatie": "Nijmegen",
+    "type": "Stage/Afstuderen",
+    "periode": "In overleg",
+    "domein": ["High-tech systemen & materialen"],
+    "keywords": ["NQR", "RF electronics", "Signal-to-noise ratio", "Signal processing", "Circuit optimization"],
+    "beschrijving": "Optimize the detection performance of a Nuclear Quadrupole Resonance (NQR) setup by systematically investigating its signal-to-noise ratio. The project focuses on identifying sources of signal loss and noise in the RF excitation, detection electronics and subsequent signal processing. Based on these measurements, the RF probe circuit will be optimized to achieve the best possible SNR over the broad frequency bandwidth required for NQR experiments. The project combines experimental spectroscopy with RF electronics, circuit characterization and signal analysis.",
+    "contact": "Y.L.A.rezus@hva.nl",
+    "docent" : "Yves Rezus",
+    "status": "open"
+}
 ]
 
