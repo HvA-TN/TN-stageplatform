@@ -30,28 +30,18 @@ function updateFavorietenKnop() {
 const map = L.map('map').setView([52.2, 5.3], 7);
 
 /* =========================
-   KAARTLAGEN LIGHT / DARK
+   KAARTLAAG
    ========================= */
 
-const lightTiles = L.tileLayer(
-  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+const mapTiles = L.tileLayer(
+  'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
   {
     maxZoom: 19,
-    attribution: '&copy; OpenStreetMap'
+    attribution: '&copy; OpenStreetMap contributors'
   }
 );
 
-const darkTiles = L.tileLayer(
-  'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
-  {
-    maxZoom: 19,
-    subdomains: 'abcd',
-    attribution: '&copy; OpenStreetMap &copy; CARTO'
-  }
-);
-
-lightTiles.addTo(map);
-
+mapTiles.addTo(map);
 /* =========================
    DATA / MARKERS
    ========================= */
@@ -421,24 +411,10 @@ function kleurVoorCategorie() {
 
 function borderVoorMarker() { return document.body.classList.contains('dark-mode') ? '#0f172a' : '#ffffff'; }
 
-function iconVoorBedrijf(bedrijf) {
-  const isDark = document.body.classList.contains('dark-mode');
-
-  const kleur = isDark ? '#e3ddf9' : '#0f172a';
-  const borderKleur = isDark ? '#0f172a' : '#e3ddf9';
-
+function iconVoorBedrijf() {
   return L.divIcon({
-    className: 'bedrijf-marker',
-    html: `
-      <div class="bedrijf-marker-inner" style="
-        width: 22px;
-        height: 22px;
-        border-radius: 50%;
-        background: ${kleur};
-        border: 3px solid ${borderKleur};
-        box-shadow: 0 2px 8px rgba(0,0,0,0.28);
-      "></div>
-    `,
+    className: 'custom-pin-wrapper',
+    html: '<div class="custom-pin"></div>',
     iconSize: [22, 22],
     iconAnchor: [11, 11]
   });
@@ -551,12 +527,12 @@ const marker = L.marker(
     renderFavorietenLijst();
   });
   marker.on('mouseover', () => {
-    const el = marker.getElement()?.querySelector('.bedrijf-marker-inner');
+    const el = marker.getElement()?.querySelector('.custom-pin');
     if (el) el.style.transform = 'scale(1.2)';
   });
 
   marker.on('mouseout', () => {
-    const el = marker.getElement()?.querySelector('.bedrijf-marker-inner');
+    const el = marker.getElement()?.querySelector('.custom-pin');
     if (el) el.style.transform = 'scale(1)';
   });
     markers.push(marker);
@@ -596,30 +572,6 @@ function updateKaart() {
 }
 
 /* =========================
-   DARK MODE MAP THEME
-   ========================= */
-
-function updateMapTheme() {
-  const isDark = document.body.classList.contains('dark-mode');
-
-  if (isDark) {
-    if (map.hasLayer(lightTiles)) {
-      map.removeLayer(lightTiles);
-    }
-    if (!map.hasLayer(darkTiles)) {
-      darkTiles.addTo(map);
-    }
-  } else {
-    if (map.hasLayer(darkTiles)) {
-      map.removeLayer(darkTiles);
-    }
-    if (!map.hasLayer(lightTiles)) {
-      lightTiles.addTo(map);
-    }
-  }
-}
-
-/* =========================
    DATA LADEN
    ========================= */
 
@@ -636,8 +588,6 @@ fetch('data/bedrijven.json')
     vulTypeFilterOpties(alleBedrijven);
     vulTagFilterOpties(alleBedrijven);
     vulProvincieFilterOpties(alleBedrijven);
-
-    updateMapTheme();
 
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
@@ -720,7 +670,6 @@ const opgeslagenThema = localStorage.getItem('theme') || 'light';
 document.body.classList.toggle('dark-mode', opgeslagenThema === 'dark');
 document.body.classList.toggle('light-mode', opgeslagenThema !== 'dark');
 
-updateMapTheme();
 updateKaart();
 
 if (darkToggle) {
@@ -732,7 +681,6 @@ if (darkToggle) {
 
     localStorage.setItem('theme', wordtDonker ? 'dark' : 'light');
 
-    updateMapTheme();
     updateKaart();
   });
 }

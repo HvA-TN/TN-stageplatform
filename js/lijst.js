@@ -1,4 +1,3 @@
-const darkToggle = document.getElementById('darkToggle');
 const zoekInput = document.getElementById('zoekInput');
 const resetZoekopdracht = document.getElementById('resetZoekopdracht');
 const zoekStatus = document.getElementById('zoekStatus');
@@ -217,19 +216,6 @@ function huidigeProvincie() {
   return provincieFilter ? provincieFilter.value : '';
 }
 
-function pasThemaToeBijStart() {
-  const opgeslagenThema = localStorage.getItem('theme');
-
-  if (opgeslagenThema === 'dark') {
-    document.body.classList.add('dark-mode');
-    document.body.classList.remove('light-mode');
-  } else {
-    // fallback = light
-    document.body.classList.add('light-mode');
-    document.body.classList.remove('dark-mode');
-  }
-}
-
 function initialiseerEvents() {
   if (zoekInput) {
     zoekInput.addEventListener('input', () => {
@@ -253,21 +239,7 @@ function initialiseerEvents() {
     resetZoekopdracht.addEventListener('click', resetZoeken);
   }
 
-if (darkToggle) {
-  darkToggle.addEventListener('click', () => {
-    const isDark = document.body.classList.contains('dark-mode');
 
-    if (isDark) {
-      document.body.classList.remove('dark-mode');
-      document.body.classList.add('light-mode');
-      localStorage.setItem('theme', 'light');
-    } else {
-      document.body.classList.remove('light-mode');
-      document.body.classList.add('dark-mode');
-      localStorage.setItem('theme', 'dark');
-    }
-  });
-}
 }
 
 function laadBedrijven() {
@@ -295,6 +267,5 @@ function laadBedrijven() {
     });
 }
 
-pasThemaToeBijStart();
 initialiseerEvents();
 laadBedrijven();

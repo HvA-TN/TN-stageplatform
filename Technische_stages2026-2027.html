@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kaart stage- en onderzoekslocaties</title>
+
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"
+>
+
+<style>
+  :root {
+    --bg: #f4f6f8;
+    --panel: rgba(255, 255, 255, 0.95);
+    --text: #1f2937;
+    --muted: #6b7280;
+    --border: rgba(31, 41, 55, 0.16);
+
+    --pin: #405b78;
+    --pin-core: #ffffff;
+    --pin-ring: rgba(64, 91, 120, 0.20);
+  }
+
+  html.dark {
+    --bg: #111827;
+    --panel: rgba(27, 36, 49, 0.96);
+    --text: #f3f4f6;
+    --muted: #aeb6c2;
+    --border: rgba(255, 255, 255, 0.15);
+
+    --pin: #9eb6cf;
+    --pin-core: #172033;
+    --pin-ring: rgba(158, 182, 207, 0.22);
+  }
+
+  html,
+  body {
+    height: 100%;
+    margin: 0;
+
+    font-family:
+      Inter,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      Helvetica,
+      Arial,
+      sans-serif;
+
+    background: var(--bg);
+  }
+
+  #map {
+    width: 100%;
+    height: 100%;
+    background: var(--bg);
+  }
+
+  /* -----------------------------
+     DARK MODE KAART
+     ----------------------------- */
+
+  html.dark .leaflet-tile-pane {
+    filter:
+      brightness(0.512)
+      contrast(1.3)
+      saturate(0.15);
+  }
+
+  /* -----------------------------
+     DARK MODE KNOP
+     ----------------------------- */
+
+  .theme-control {
+    position: fixed;
+    z-index: 1000;
+
+    top: 16px;
+    right: 16px;
+  }
+
+  #themeToggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    height: 40px;
+    padding: 0 14px;
+
+    border: 1px solid var(--border);
+    border-radius: 999px;
+
+    background: var(--panel);
+    color: var(--text);
+
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    box-shadow:
+      0 3px 12px rgba(0, 0, 0, 0.12);
+
+    backdrop-filter: blur(8px);
+  }
+
+  #themeToggle:hover {
+    transform: translateY(-1px);
+  }
+
+  .theme-icon {
+    font-size: 15px;
+  }
+
+
+/* -----------------------------
+   MARKERS
+   ----------------------------- */
+
+.custom-pin-wrapper {
+  background: transparent;
+  border: none;
+}
+
+.custom-pin {
+  position: relative;
+
+  width: 22px;
+  height: 22px;
+}
+
+
+/* Subtiele halo rondom de marker */
+.custom-pin::before {
+  content: "";
+
+  position: absolute;
+  inset: -5px;
+
+  border-radius: 50%;
+
+  background: rgba(64, 91, 120, 0.22);
+
+  border: 1px solid rgba(64, 91, 120, 0.30);
+}
+
+/* De eigenlijke marker */
+.custom-pin::after {
+  content: "";
+
+  position: absolute;
+  inset: 2px;
+
+  border-radius: 50%;
+
+  background: #ffffff;
+
+  border: 5px solid #405b78;
+
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(255, 255, 255, 0.8);
+}
+
+/* Dark mode */
+html.dark .custom-pin::before {
+  background: rgba(158, 182, 207, 0.28);
+  border-color: rgba(158, 182, 207, 0.40);
+}
+
+html.dark .custom-pin::after {
+  background: #172033;
+  border-color: #a9bfd6;
+
+  box-shadow:
+    0 1px 4px rgba(0, 0, 0, 0.65),
+    0 0 0 1px rgba(255, 255, 255, 0.20);
+}
+
+  /* -----------------------------
+     LABELS
+     ----------------------------- */
+
+  .leaflet-tooltip.permanent-name-label {
+    white-space: nowrap;
+
+    padding: 6px 10px;
+
+    border-radius: 999px;
+
+    background: var(--panel);
+    color: var(--text);
+
+    border: 1px solid var(--border);
+
+    box-shadow:
+      0 6px 8px rgba(0, 0, 0, 0.13);
+
+    font-size: 12.5px;
+    font-weight: 600;
+
+    letter-spacing: 0.01em;
+
+    backdrop-filter: blur(7px);
+  }
+
+  .leaflet-tooltip-left.permanent-name-label::before {
+    border-left-color: var(--panel);
+  }
+
+  .leaflet-tooltip-right.permanent-name-label::before {
+    border-right-color: var(--panel);
+  }
+
+  .leaflet-tooltip-top.permanent-name-label::before {
+    border-top-color: var(--panel);
+  }
+
+  .leaflet-tooltip-bottom.permanent-name-label::before {
+    border-bottom-color: var(--panel);
+  }
+
+  /* -----------------------------
+     POPUPS
+     ----------------------------- */
+
+  .leaflet-popup-content-wrapper,
+  .leaflet-popup-tip {
+    background: var(--panel);
+    color: var(--text);
+  }
+
+  .leaflet-popup-content-wrapper {
+    border-radius: 12px;
+
+    border: 1px solid var(--border);
+
+    box-shadow:
+      0 4px 18px rgba(0, 0, 0, 0.18);
+  }
+
+  .leaflet-popup-content {
+    margin: 12px 14px;
+  }
+
+  .popup-title {
+    font-weight: 700;
+    font-size: 14px;
+
+    margin-bottom: 3px;
+  }
+
+  .popup-city {
+    color: var(--muted);
+
+    font-size: 13px;
+  }
+
+  /* -----------------------------
+     LEAFLET CONTROLS
+     ----------------------------- */
+
+  .leaflet-control-zoom a {
+    background: var(--panel);
+    color: var(--text);
+
+    border-color: var(--border);
+  }
+
+  .leaflet-control-zoom a:hover {
+    background: var(--bg);
+    color: var(--text);
+  }
+
+  .leaflet-control-attribution {
+    background: var(--panel) !important;
+    color: var(--muted) !important;
+  }
+
+  .leaflet-control-attribution a {
+    color: var(--text);
+  }
+
+  /* -----------------------------
+     MOBIEL
+     ----------------------------- */
+
+  @media (max-width: 600px) {
+
+    #themeToggle .theme-text {
+      display: none;
+    }
+
+    #themeToggle {
+      width: 40px;
+      padding: 0;
+
+      justify-content: center;
+    }
+
+    .leaflet-tooltip.permanent-name-label {
+      font-size: 11px;
+
+      padding: 5px 8px;
+    }
+  }
+</style>
+</head>
+
+<body>
+
+<div class="theme-control">
+
+  <button
+    id="themeToggle"
+    type="button"
+    aria-label="Schakel tussen lichte en donkere kaart"
+  >
+
+    <span
+      class="theme-icon"
+      id="themeIcon"
+    >
+      ☾
+    </span>
+
+    <span
+      class="theme-text"
+      id="themeText"
+    >
+      Donker
+    </span>
+
+  </button>
+
+</div>
+
+
+<div id="map"></div>
+
+
+<script
+  src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js">
+</script>
+
+
+<script>
+
+(function () {
+
+  const root = document.documentElement;
+
+  const toggle =
+    document.getElementById("themeToggle");
+
+  const themeIcon =
+    document.getElementById("themeIcon");
+
+  const themeText =
+    document.getElementById("themeText");
+
+
+  /* -----------------------------
+     LOCATIES
+     ----------------------------- */
+
+  const locations = [
+
+    {
+      name: "Tata Steel",
+      city: "IJmuiden / Velsen-Noord",
+
+      lat: 52.4687,
+      lon: 4.6040,
+
+      direction: "left",
+      offset: [-10, 0]
+    },
+
+    {
+      name: "Hogeschool van Amsterdam",
+      city: "Amsterdam",
+
+      lat: 52.3590,
+      lon: 4.9080,
+
+      direction: "left",
+      offset: [-10, 0]
+    },
+
+
+    {
+      name: "UvA - IOP",
+      city: "Amsterdam Science Park",
+
+      lat: 52.3558,
+      lon: 4.9553,
+
+      direction: "right",
+      offset: [10, -18]
+    },
+
+    {
+      name: "UvA - HIMS",
+      city: "Amsterdam Science Park",
+
+      lat: 52.3554,
+      lon: 4.9558,
+
+      direction: "right",
+      offset: [10, 18]
+    },
+
+    {
+      name: "AMOLF",
+      city: "Amsterdam Science Park",
+
+      lat: 52.35660791867336,
+      lon: 4.9487,
+
+      direction: "left",
+      offset: [-10, 26]
+    },
+
+    {
+      name: "ARCNL",
+      city: "Amsterdam Science Park",
+
+      lat: 52.35741387903756,
+      lon: 4.9473,
+
+      direction: "left",
+      offset: [-10, -34]
+    },
+
+
+    {
+      name: "PhotonFirst",
+      city: "Alkmaar",
+
+      lat: 52.6320,
+      lon: 4.7530,
+
+      direction: "right",
+      offset: [10, 0]
+    },
+
+
+    {
+      name: "Leiden - LION",
+      city: "Leiden",
+
+      lat: 52.1686,
+      lon: 4.4595,
+
+      direction: "right",
+      offset: [10, -14]
+    },
+
+    {
+      name: "SRON",
+      city: "Leiden",
+
+      lat: 52.1680,
+      lon: 4.4588,
+
+      direction: "left",
+      offset: [-10, 14]
+    },
+
+
+    {
+      name: "DUNEdain Space",
+      city: "Noordwijk",
+
+      lat: 52.2390,
+      lon: 4.4480,
+
+      direction: "left",
+      offset: [-10, 0]
+    }
+
+  ];
+
+
+  /* -----------------------------
+     KAART
+     ----------------------------- */
+
+  const map = L.map("map", {
+    zoomControl: true
+  });
+
+
+  /* OpenStreetMap:
+     geen API-key nodig */
+
+  L.tileLayer(
+
+    "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+
+    {
+      maxZoom: 19,
+
+      attribution:
+        '&copy; OpenStreetMap contributors'
+    }
+
+  ).addTo(map);
+
+
+  /* -----------------------------
+     CUSTOM PIN
+     ----------------------------- */
+
+  const pinIcon = L.divIcon({
+
+    className: "custom-pin-wrapper",
+
+    html:
+      '<div class="custom-pin"></div>',
+
+    iconSize: [18, 18],
+
+    iconAnchor: [9, 9]
+
+  });
+
+
+  /* -----------------------------
+     MARKERS
+     ----------------------------- */
+
+  const bounds =
+    L.latLngBounds([]);
+
+
+  locations.forEach(function (loc) {
+
+    const marker =
+      L.marker(
+        [loc.lat, loc.lon],
+        {
+          icon: pinIcon
+        }
+      )
+      .addTo(map);
+
+
+    marker.bindPopup(
+
+      '<div class="popup-title">' +
+      loc.name +
+      '</div>' +
+
+      '<div class="popup-city">' +
+      loc.city +
+      '</div>'
+
+    );
+
+
+    marker.bindTooltip(
+
+      loc.name,
+
+      {
+        permanent: true,
+
+        direction:
+          loc.direction || "top",
+
+        offset:
+          loc.offset || [0, -24],
+
+        opacity: 1,
+
+        className:
+          "permanent-name-label"
+      }
+
+    ).openTooltip();
+
+
+    bounds.extend(
+      [loc.lat, loc.lon]
+    );
+
+  });
+
+
+  /* -----------------------------
+     AUTOMATISCH PASSEN
+     ----------------------------- */
+
+  map.fitBounds(
+    bounds,
+    {
+      padding: [45, 45]
+    }
+  );
+
+
+  /* -----------------------------
+     DARK MODE
+     ----------------------------- */
+
+  let darkMode = false;
+
+
+  function setTheme(isDark) {
+
+    root.classList.toggle(
+      "dark",
+      isDark
+    );
+
+
+    if (isDark) {
+
+      themeIcon.textContent =
+        "☀";
+
+      themeText.textContent =
+        "Licht";
+
+    }
+
+    else {
+
+      themeIcon.textContent =
+        "☾";
+
+      themeText.textContent =
+        "Donker";
+
+    }
+
+  }
+
+
+  toggle.addEventListener(
+    "click",
+    function () {
+
+      darkMode =
+        !darkMode;
+
+      setTheme(darkMode);
+
+    }
+  );
+
+
+  setTimeout(
+    function () {
+
+      map.invalidateSize();
+
+    },
+    250
+  );
+
+})();
+
+</script>
+
+</body>
+</html>
