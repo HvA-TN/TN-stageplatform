@@ -37,6 +37,58 @@
     "contact": "Y.L.A.rezus@hva.nl",
     "docent" : "Yves Rezus",
     "status": "open"
+},
+{
+    "titel": "IoT Track & Trace Systeem voor Staalpannen",
+    "bedrijf": "Tata Steel Nederland",
+    "locatie": "IJmuiden",
+    "type": "Stage",
+    "periode": "~Februari",
+    "domein": ["High-tech systemen & materialen", "Data & digitalisering"],
+    "keywords": ["IoT", "Arduino", "Indoor tracking", "Sensoren", "Industrie 4.0"],
+    "beschrijving": "Ontwikkel een IoT-trackingsysteem waarmee staalpannen binnen de fabriek van Tata Steel realtime gevolgd kunnen worden. Je onderzoekt geschikte indoor trackingtechnieken en ontwikkelt een Arduino-gebaseerde trackingmodule met draadloze communicatie. Daarbij houd je rekening met de uitdagende industriële omgeving, waaronder hoge temperaturen en een metaalrijke omgeving. Het prototype wordt gekoppeld aan een centrale dataomgeving waarin locatiegegevens kunnen worden opgeslagen en weergegeven. Het uiteindelijke systeem vormt input voor verdere optimalisatie van logistiek, onderhoud en energiegebruik.",
+    "contact": "J.busink@hva.nl",
+    "docent": "Joris Busink",
+    "status": "open"
+},
+{
+    "titel": "Dual Beam Spectrometer",
+    "bedrijf": "Avantes",
+    "locatie": "Apeldoorn",
+    "type": "Stage/Afstuderen",
+    "periode": "~Februari",
+    "domein": ["High-tech systemen & materialen"],
+    "keywords": ["Spectroscopie", "Optica", "2D detector", "Elektronica", "Signaalverwerking"],
+    "beschrijving": "Ontwikkel een demonstratiemodel van een dual beam spectrometer waarmee een meetspectrum en referentiespectrum gelijktijdig kunnen worden gemeten. Je selecteert en integreert een geschikte 2D-detector in bestaande spectrometerhardware en onderzoekt welke mechanische en elektronische aanpassingen hiervoor nodig zijn. Daarnaast ontwikkel je software voor het uitlezen en verwerken van beide spectra, eventueel in combinatie met AvaSoft. Het prototype wordt getest met vergelijkende spectroscopische metingen. Op basis van de resultaten geef je advies over verdere ontwikkeling van het dual beam concept.",
+    "contact": "J.busink@hva.nl",
+    "docent": "Joris Busink",
+    "status": "open"
+},
+{
+    "titel": "Data-ontsluiting Natte Infra naar Object Data Service",
+    "bedrijf": "SWARCO",
+    "locatie": "Wormerveer",
+    "type": "Stage",
+    "periode": "~September/~Februari",
+    "domein": ["Data & digitalisering"],
+    "keywords": ["Industriële automatisering", "Data-ontsluiting", "Controllers", "Infrastructuur", "Object Data Service"],
+    "beschrijving": "Onderzoek en ontwikkel een gestandaardiseerde methode om data uit bruggen, sluizen en stuwen te ontsluiten richting de Object Data Service (ODS) van Rijkswaterstaat. Je werkt met industriële controllers, communicatieprotocollen en datastromen en onderzoekt hoe ruwe objectdata betrouwbaar kan worden verzameld, bewerkt en geconverteerd. Vervolgens realiseer en test je een werkende datakoppeling tussen het object en ODS. De ontwikkelde aanpak wordt vergeleken met bestaande oplossingen, waarbij ook de total cost of ownership wordt onderzocht. Het resultaat kan als standaardcomponent worden toegepast in toekomstige natte-infraprojecten.",
+    "contact": "J.busink@hva.nl",
+    "docent": "Joris Busink",
+    "status": "open"
+},
+{
+    "titel": "Gerouteerd Noodstopsysteem met OPC UA Safe",
+    "bedrijf": "SWARCO",
+    "locatie": "Wormerveer",
+    "type": "Stage/Afstuderen",
+    "periode": "~September/~Februari",
+    "domein": ["Veiligheid & defensie", "Data & digitalisering"],
+    "keywords": ["OPC UA Safe", "Functionele veiligheid", "SIL", "Industriële automatisering", "Redundantie"],
+    "beschrijving": "Onderzoek of OPC UA Safe geschikt is voor het realiseren van een betrouwbaar en redundant gerouteerd noodstopsysteem voor bruggen en sluizen van Rijkswaterstaat. Je ontwerpt en bouwt een testconfiguratie met industriële controllers, routers en servers en onderzoekt de werking onder verschillende netwerkcondities. Daarbij test je onder andere latency, netwerkcongestie en het uitvallen van kritieke componenten. Ook onderzoek je de reactietijd van een noodstopsignaal en de toepasbaarheid binnen veiligheidsniveaus zoals SIL2 en SIL3. Op basis van de resultaten adviseer je over toepassing van OPC UA Safe binnen toekomstige kritieke infrastructuur.",
+    "contact": "J.busink@hva.nl",
+    "docent": "Joris Busink",
+    "status": "open"
 }
 ]
 
