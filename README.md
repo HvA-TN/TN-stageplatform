@@ -17,6 +17,7 @@ De belangrijkste onderdelen van de website zijn:
 * bedrijvenkaart;
 * historische stagedata en statistieken.
 
+https://hva-tn.github.io/TN-stageplatform/index.html
 ---
 
 # Stage- en afstudeeropdrachten beheren
