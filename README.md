@@ -20,7 +20,7 @@ De belangrijkste onderdelen van de website zijn:
 https://hva-tn.github.io/TN-stageplatform/index.html
 ---
 
-# Stage- en afstudeeropdrachten beheren
+# Stage- en afstudeeropdrachten beheren:
 
 De beschikbare opdrachten staan in:
 
