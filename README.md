@@ -82,8 +82,8 @@ Na de laatste opdracht staat **geen komma**.
 | Veld           | Betekenis                                | Voorbeeld                                         |
 | -------------- | ---------------------------------------- | ------------------------------------------------- |
 | `titel`        | Titel van de opdracht                    | `"Dual Beam Spectrometer"`                        |
-| `bedrijf`      | Bedrijf of onderzoeksinstelling          | `"Avantes"`                                       |
-| `locatie`      | Plaats waar de opdracht wordt uitgevoerd | `"Apeldoorn"`                                     |
+| `bedrijf`      | Bedrijf of onderzoeksinstelling          | `"Bedrijf"`                                       |
+| `locatie`      | Plaats waar de opdracht wordt uitgevoerd | `"Lutjebroke"`                                     |
 | `type`         | Soort opdracht                           | `"Stage"`, `"Afstuderen"` of `"Stage/Afstuderen"` |
 | `periode`      | Verwachte startperiode                   | `"~September"`, `"~Februari"`, `"In overleg"`     |
 | `domein`       | Een of meerdere inhoudelijke domeinen    | `["High-tech systemen & materialen"]`             |
