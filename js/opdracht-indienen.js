@@ -7,6 +7,29 @@
   if (!form) return;
   const button = document.getElementById('opdrachtVersturen');
   const status = document.getElementById('inzendingStatus');
+  const contentChoice = document.getElementById('inhoudType');
+  const documentInput = document.getElementById('opdrachtDocument');
+  const descriptionInput = form.querySelector('[name="message"]');
+  document.getElementById('inhoudKeuze').hidden = !cloudflareActief;
+  function updateContentType() {
+    const upload = cloudflareActief && contentChoice.value === 'document';
+    document.getElementById('beschrijvingVeld').hidden = upload;
+    document.getElementById('documentVeld').hidden = !upload;
+    descriptionInput.disabled = upload;
+    descriptionInput.required = !upload;
+    documentInput.disabled = !upload;
+    documentInput.required = upload;
+    documentInput.setCustomValidity('');
+  }
+  contentChoice.addEventListener('change', updateContentType);
+  documentInput.addEventListener('change', () => {
+    const files = [...documentInput.files];
+    const invalid = files.length > 2 || files.some(file => file.size > 5 * 1024 * 1024 || !/\.(pdf|doc|docx)$/i.test(file.name));
+    documentInput.setCustomValidity(invalid ? (document.documentElement.lang === 'en'
+      ? 'Choose up to 2 PDF or Word files, no more than 5 MB each.' : 'Kies maximaal 2 PDF- of Word-bestanden, elk maximaal 5 MB.') : '');
+    documentInput.reportValidity();
+  });
+  updateContentType();
   let bezig = false;
   let melding = '';
   let foutdetail = '';
@@ -46,7 +69,7 @@
       periode: tekst('periode') || 'In overleg',
       domein: [],
       keywords: [],
-      beschrijving: tekst('message'),
+      beschrijving: tekst('message') || 'Document ontvangen. Voeg voor publicatie een beschrijving toe.',
       docent: '',
       status: 'closed'
     }, null, 2);
@@ -70,7 +93,7 @@
     foutbron = '';
     toonMelding();
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 30000);
+    const timeout = setTimeout(() => controller.abort(), 90000);
     try {
       if (cloudflareActief) {
         foutbron = 'Inbox';
@@ -82,6 +105,14 @@
         // This token belongs to our Worker and has already been verified there.
         // Web3Forms has its own, separately configured captcha integration.
         data.delete('cf-turnstile-response');
+        const files = data.getAll('document').filter(file => file?.size);
+        if (files.length) {
+          data.set('document_ontvangen', `${files.map(file => file.name).join(', ')} - beschikbaar in de beveiligde inbox.`);
+          data.set('inzending_id', window.inzendingOntvangst.id());
+          data.set('message', 'Opdracht met documenten ingediend. Download de bestanden in de beveiligde inbox.');
+        }
+        // File attachments are not part of the free email integration.
+        data.delete('document');
         const response = await fetch(form.action, {
           method: 'POST',
           headers: { Accept: 'application/json' },
@@ -94,6 +125,7 @@
         }
       }
       form.reset();
+      updateContentType();
       window.inzendingOntvangst?.reset();
       melding = 'success';
     } catch (error) {

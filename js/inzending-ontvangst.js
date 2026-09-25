@@ -20,7 +20,20 @@ window.inzendingOntvangst = (() => {
     const fields = ['titel', 'organisatie', 'locatie', 'type', 'periode', 'message', 'name', 'email', 'telefoon', 'documentlink'];
     const body = Object.fromEntries(fields.map(key => [key, String(data.get(key) || '').trim()]));
     body.direct = String(data.get('email_delen')).startsWith('Opdracht en contactgegevens rechtstreeks');
-    const fingerprint = JSON.stringify(body);
+    const files = data.getAll('document').filter(file => file?.size);
+    if (files.length > 2) throw new Error('Maximaal 2 bestanden.');
+    if (files.length) body.documents = [];
+    for (const file of files) {
+      if (file.size > 5 * 1024 * 1024 || !/\.(pdf|doc|docx)$/i.test(file.name)) throw new Error('PDF of Word, maximaal 5 MB per bestand.');
+      const bytes = new Uint8Array(await file.arrayBuffer());
+      let binary = '';
+      for (let offset = 0; offset < bytes.length; offset += 32768) {
+        binary += String.fromCharCode(...bytes.subarray(offset, offset + 32768));
+      }
+      body.documents.push({ name: file.name, content: btoa(binary) });
+    }
+    const fingerprint = Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',
+      new TextEncoder().encode(JSON.stringify(body)))), byte => byte.toString(16).padStart(2, '0')).join('');
     if (!attempt || attempt.fingerprint !== fingerprint) attempt = { fingerprint, id: crypto.randomUUID(), stored: false };
     if (attempt.stored) return;
     const token = widget === undefined ? '' : window.turnstile?.getResponse(widget);
@@ -38,5 +51,5 @@ window.inzendingOntvangst = (() => {
     } finally { window.turnstile?.reset(widget); }
   }
   function reset() { attempt = null; if (widget !== undefined) window.turnstile?.reset(widget); }
-  return { enabled, bewaar, reset, opgeslagen: () => Boolean(attempt?.stored) };
+  return { enabled, bewaar, reset, id: () => attempt?.id || '', opgeslagen: () => Boolean(attempt?.stored) };
 })();

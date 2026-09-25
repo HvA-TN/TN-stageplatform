@@ -266,7 +266,7 @@ Log in op opdrachtenbeheer en open Te beoordelen met de inboxcode. Bekijk de
 contactgegevens, klik Overnemen om te bewerken en publiceer via de bestaande
 versleutelde download + commit/push. Een overgenomen opdracht begint gesloten.
 Markeer daarna de inzending als afgehandeld. Dit is omkeerbaar via de lijst
-Afgehandeld. De inzending blijft bewaard; afhandelen verwijdert geen persoonsgegevens.
+Afgehandeld. Na zes maanden vanaf afhandelen verwijdert de dagelijkse opruimtaak de inzending en documenten, mits de Cron Trigger is ingesteld.
 Inzending-ID voorkomt dubbel overnemen zodra je de gewijzigde opdrachtenlijst
 hebt opgeslagen en gepubliceerd. Contactgegevens worden niet automatisch in
 de studentenlijst opgenomen.
@@ -324,3 +324,57 @@ klaar is. `closed` verbergt alleen de kaart: het openbare JSON-bestand zelf is
 zonder wachtwoord leesbaar. Gebruik dit bestand dus alleen voor openbare gegevens.
 De werking van elke publicatie-instelling staat ook als commentaar direct boven
 de instelling in `js/site-instellingen.js`.
+
+### Documenten bij inzendingen
+
+Met Cloudflare actief kunnen bedrijven kiezen tussen een beschrijving en maximaal
+twee bestanden: PDF of Word (.doc/.docx), elk maximaal 5 MB. De overige
+opdracht- en contactvelden blijven verplicht waar aangegeven.
+
+Koppel de private R2-bucket `tn-stageplatform-documenten` aan de Worker met binding
+`DOCUMENTS`. Laat openbare toegang uit. Deploy de bijgewerkte `cloudflare/worker.mjs`
+en publiceer daarna de gewijzigde websitebestanden. Er is geen SQL-migratie nodig:
+documentmetadata staat bij de bestaande contactgegevens in D1.
+
+De inbox toont een beveiligde downloadknop. De e-mail bevat de bestandsnaam en
+inzending-ID, geen bijlage of openbare downloadlink. Overnemen maakt een gesloten
+opdracht; vul op basis van het document een beschrijving in voordat je publiceert.
+Bij alleen e-mail is documentupload niet beschikbaar.
+
+De Worker controleert bestandsgrootte, extensie en bestandsheader; dit is geen
+virusscan. Downloads worden als bijlage aangeboden, niet ingebed in de website.
+Archiveren start de bewaartermijn van zes maanden; de dagelijkse opruimtaak verwijdert daarna de inzending en documenten. Verwijder bij een verwijderverzoek zowel
+de inzending in D1 als het bijbehorende object in R2. Een opslagfout tussen R2 en
+D1 kan een ongekoppeld object achterlaten; controleer dit bij onderhoud.
+
+### Automatisch verwijderen na zes maanden
+
+Een afgehandelde inzending wordt zes kalendermaanden na afhandelen verwijderd,
+samen met de gekoppelde R2-documenten. De dagelijkse taak verwerkt maximaal 100
+inzendingen per keer; bij grotere achterstand volgen de overige op volgende dagen.
+Niet-afgehandelde inzendingen worden niet verwijderd. Terugzetten naar te beoordelen
+wist de afhandeldatum, zolang opruimen nog niet begonnen is. Opnieuw afhandelen start
+een nieuwe termijn. Opnieuw klikken op afhandelen verlengt een lopende termijn niet.
+
+Activeren voor een bestaande installatie:
+
+1. Open de D1-databaseconsole en voer `cloudflare/migrate-retention.sql` eenmaal uit.
+   Deze migratie voegt twee kolommen toe. Bestaande afgehandelde inzendingen krijgen
+   de migratiedatum als startdatum; er wordt op dat moment niets verwijderd.
+2. Vervang de Worker-code door `cloudflare/worker.mjs` en deploy.
+3. Voeg bij de Worker onder Settings > Trigger Events een Cron Trigger toe:
+   `0 3 * * *` (dagelijks om 03:00 UTC). Bewaar de trigger.
+4. Publiceer de gewijzigde websitebestanden. Controleer de geplande uitvoeringen
+   in Cloudflare na activering. Zonder Cron Trigger vindt geen opruiming plaats.
+
+Nieuwe databases gebruiken de bijgewerkte `schema.sql`; voer daarop niet ook de
+migratie uit. Laat de bestaande bindings `DB` en `DOCUMENTS` gekoppeld.
+
+De taak verwijdert eerst de documenten en daarna de databaserij. Bij fouten blijven
+de metadata beschikbaar om later opnieuw te proberen. Zodra opruimen is begonnen,
+kan de inzending niet meer worden teruggezet. Een fout wordt als mislukte geplande
+uitvoering gemeld, zonder persoonsgegevens in de foutmelding.
+
+Dit ruimt alleen de actieve D1-inbox en bijbehorende R2-documenten op. Het wijzigt
+geen gepubliceerde opdrachten, ontvangen e-mails, lokale downloads of eventuele
+back-ups. Ongekoppelde objecten door een eerdere uploadfout vallen buiten deze taak.

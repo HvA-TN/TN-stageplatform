@@ -579,10 +579,20 @@ body.dark-mode .assignment-keyword {
 .company-teachers { margin: 12px 0 16px; }
 .password-input-row { display: flex; align-items: center; gap: 8px; min-width: 0; width: 100%; max-width: 440px; }
 .password-input-row input { flex: 1; min-width: 0; }
-.password-input-row button { flex-shrink: 0; }
+.password-input-row button { flex-shrink: 0; width: auto; }
 .info-card .password-error { margin: 0; color: #b42318; font-size: .9rem; }
 body.dark-mode .info-card .password-error { color: #ffb4ab; }
-#beoordelingen { margin-bottom: 24px; }
+#beoordelingen { margin-block: 32px 24px; min-width: 0; }
+.inbox-login {
+  display: grid; gap: 10px; width: 100%; max-width: 440px; min-width: 0;
+  padding-block: 8px 16px;
+}
+.inbox-login > label { font-weight: 600; }
+.info-card .inbox-login p { margin: 0; color: var(--text-soft); font-size: .85rem; }
+#beoordelingenOpenen { justify-self: start; width: auto; max-width: 100%; margin-top: 4px; }
+#beoordelingenInhoud { min-width: 0; padding-top: 20px; border-top: 1px solid var(--border); }
+#beoordelingen .opdracht-index-actions { min-width: 0; }
+#beoordelingen .opdracht-index-actions button { max-width: 100%; white-space: normal; overflow-wrap: anywhere; }
 #beoordelingen[hidden], #beoordelingenInhoud[hidden] { display: none; }
 #beoordelingenLijst { margin: 16px 0; }
 #beoordelingenLijst p { white-space: pre-wrap; overflow-wrap: anywhere; }
@@ -606,6 +616,8 @@ body.dark-mode .info-card .password-error { color: #ffb4ab; }
 
 .submission-fields { align-items: start; }
 .submission-fields > label { align-content: start; }
+.submission-form label[hidden] { display: none; }
+#documentUitleg { color: var(--text-soft); font-size: .9rem; line-height: 1.5; }
 .submission-fields > label > span { min-height: 1.4em; }
 .contact-sharing {
   min-width: 0;

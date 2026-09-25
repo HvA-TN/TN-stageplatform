@@ -90,9 +90,21 @@
                 <span data-en="Start period (optional)">Startperiode (optioneel)</span>
                 <input name="periode" placeholder="" data-en-placeholder="" maxlength="150">
               </label>
-              <label class="submission-wide">
+              <label id="inhoudKeuze" class="submission-wide" hidden>
+                <span data-en="How would you like to describe the project?">Hoe wil je de opdracht toelichten?</span>
+                <select id="inhoudType">
+                  <option value="text" data-en="Type a description">Beschrijving typen</option>
+                  <option value="document" data-en="Upload documents">Documenten uploaden</option>
+                </select>
+              </label>
+              <label id="beschrijvingVeld" class="submission-wide">
                 <span data-en="Description">Beschrijving</span>
                 <textarea name="message" rows="7" maxlength="10000" placeholder="Beschrijf de context, het doel, de werkzaamheden en de beschikbare begeleiding." data-en-placeholder="Describe the context, objective, activities and available supervision." required></textarea>
+              </label>
+              <label id="documentVeld" class="submission-wide" hidden>
+                <span data-en="Project documents (max. 2, PDF or Word, 5 MB each)">Opdrachtdocumenten (max. 2, PDF of Word, elk 5 MB)</span>
+                <input id="opdrachtDocument" name="document" type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" multiple disabled aria-describedby="documentUitleg">
+                <span id="documentUitleg" data-en="Select up to two PDF or Word files (.doc or .docx). The coordinator can download them for review. They will not be published automatically.">Selecteer maximaal twee PDF- of Word-bestanden (.doc of .docx). De coördinator kan deze downloaden voor beoordeling. Ze worden niet automatisch gepubliceerd.</span>
               </label>
               <label class="submission-wide">
                 <span data-en="Link to a project document (optional)">Link naar een opdrachtdocument (optioneel)</span>

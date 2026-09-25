@@ -6,7 +6,7 @@
   const list = el('beoordelingenLijst');
   const message = el('beoordelingenStatus');
   let token = '', page = 0, controller, busy = false, session = 0;
-  async function request(path, options = {}) {
+  async function request(path, options = {}, download = false) {
     let response;
     try {
       response = await fetch(api + path, { ...options, signal: controller.signal,
@@ -18,6 +18,7 @@
         ? 'De inbox is niet toegankelijk vanaf dit lokale adres. Open opdrachtenbeheer op https://hva-tn.github.io/TN-stageplatform/opdrachten-beheer.html.'
         : `Geen verbinding met de inbox. Controleer je internetverbinding en of Cloudflare SITE_ORIGIN exact ${window.location.origin} toestaat.`);
     }
+    if (download && response.ok) return response.blob();
     const value = await response.json();
     if (!response.ok) throw new Error(value.error || 'Laden mislukt.');
     return value;
@@ -45,7 +46,30 @@
         contact.textContent = `Contact: ${item.contact.naam} · ${item.contact.email}${item.contact.telefoon ? ' · ' + item.contact.telefoon : ''}. Voorkeur: ${item.contact.delen}.${item.contact.documentlink ? ' Document: ' + item.contact.documentlink : ''}`;
         const actions = document.createElement('div');
         actions.className = 'opdracht-index-actions';
+        const files = item.contact.documents || (item.contact.document ? [item.contact.document] : []);
+        files.forEach((file, index) => {
+          const download = document.createElement('button');
+          download.type = 'button'; download.className = 'search-reset-button';
+          download.textContent = `Download: ${file.name}`;
+          download.addEventListener('click', async () => {
+            download.disabled = true;
+            const generation = session;
+            try {
+              const blob = await request(`/submissions/${item.id}/document/${index}`, {}, true);
+              if (generation !== session) return;
+              const url = URL.createObjectURL(blob);
+              const link = document.createElement('a');
+              link.href = url; link.download = file.name;
+              document.body.appendChild(link); link.click(); link.remove();
+              setTimeout(() => URL.revokeObjectURL(url), 1000);
+            } catch (error) {
+              if (generation === session && error.name !== 'AbortError') message.textContent = error.message;
+            } finally { download.disabled = false; }
+          });
+          actions.appendChild(download);
+        });
         const transfer = document.createElement('button');
+        transfer.disabled = Boolean(item.cleanup_started_at);
         transfer.type = 'button'; transfer.className = 'search-reset-button'; transfer.textContent = 'Overnemen om te bewerken';
         transfer.addEventListener('click', () => {
           const detail = { project: item.project, submissionId: item.id, accepted: false };
@@ -56,6 +80,7 @@
           }
         });
         const archive = document.createElement('button');
+        archive.disabled = Boolean(item.cleanup_started_at);
         archive.type = 'button'; archive.className = 'search-reset-button';
         archive.textContent = state === 'pending' ? 'Als afgehandeld markeren' : 'Terug naar te beoordelen';
         archive.addEventListener('click', async () => {
