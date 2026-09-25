@@ -4,7 +4,7 @@ const digest = async value => new Uint8Array(await crypto.subtle.digest('SHA-256
 const hex = bytes => Array.from(bytes, byte => byte.toString(16).padStart(2, '0')).join('');
 
 async function authorised(request, env) {
-  if (!env.REVIEW_TOKEN || env.REVIEW_TOKEN.length < 32) return false;
+  if (!env.REVIEW_TOKEN || env.REVIEW_TOKEN.length < 8) return false;
   const header = request.headers.get('Authorization') || '';
   if (!header.startsWith('Bearer ') || header.length > 1024) return false;
   const [actual, expected] = await Promise.all([digest(header.slice(7)), digest(env.REVIEW_TOKEN)]);

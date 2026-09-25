@@ -232,7 +232,7 @@ Voeg bij Bindings een D1 database toe met variabelenaam `DB`, gekoppeld aan
 | Naam | Type | Waarde |
 | --- | --- | --- |
 | SITE_ORIGIN | Text | `https://hva-tn.github.io` (zonder pad of afsluitende slash) |
-| REVIEW_TOKEN | Secret | Een nieuwe willekeurige toegangscode van minimaal 32 tekens, uit je wachtwoordmanager |
+| REVIEW_TOKEN | Secret | Een toegangscode van minimaal 8 tekens, zonder verdere samenstellingseisen |
 | TURNSTILE_SECRET | Secret | De geheime sleutel uit stap 3 |
 
 REVIEW_TOKEN is apart van het adminwachtwoord voor het versleutelde bestand.
@@ -324,4 +324,3 @@ klaar is. `closed` verbergt alleen de kaart: het openbare JSON-bestand zelf is
 zonder wachtwoord leesbaar. Gebruik dit bestand dus alleen voor openbare gegevens.
 De werking van elke publicatie-instelling staat ook als commentaar direct boven
 de instelling in `js/site-instellingen.js`.
-
