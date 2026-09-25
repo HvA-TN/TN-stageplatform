@@ -6,7 +6,7 @@ window.siteInstellingen = {
   // false: geen gast/adminlogin; lees en bewerk data/opdrachten-openbaar.json.
   // Bestaande versleutelde gegevens worden niet omgezet of verwijderd.
   // De Cloudflare-inbox houdt altijd zijn eigen toegangscode.
-  wachtwoordenActief: false,
+  wachtwoordenActief: true,
 
   // Toont het bedrijfsformulier en de links ernaartoe.
   // false: geen nieuwe inzendingen via de website; bestaande inbox blijft beschikbaar.
@@ -16,7 +16,7 @@ window.siteInstellingen = {
   // Automatische opslag van voorstellen in Cloudflare + inbox in beheer + Turnstile.
   // false: geen Cloudflare-verzoeken of spamcontrole vanuit de website.
   // Dit verwijdert geen inzendingen en deactiveert de Worker zelf niet.
-  cloudflareActief: false,
+  cloudflareActief: true,
 
   // Verstuurt de inzending via Web3Forms naar het ingestelde e-mailadres.
   // false: geen e-mail; met Cloudflare aan komt de inzending wel in de inbox.
