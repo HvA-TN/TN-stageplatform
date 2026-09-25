@@ -15,9 +15,5 @@
   submissionLinks.forEach(link => { link.hidden = false; });
   if (!onderdeel) return;
   onderdeel.hidden = false;
-  const privacyEmail = document.getElementById('privacyEmail');
-  const privacyInbox = document.getElementById('privacyInbox');
-  if (privacyEmail) privacyEmail.hidden = window.siteInstellingen.emailActief !== true;
-  if (privacyInbox) privacyInbox.hidden = window.siteInstellingen.cloudflareActief !== true;
 
 })();
