@@ -16,7 +16,7 @@ window.siteInstellingen = {
   // Automatische opslag van voorstellen in Cloudflare + inbox in beheer + Turnstile.
   // false: geen Cloudflare-verzoeken of spamcontrole vanuit de website.
   // Dit verwijdert geen inzendingen en deactiveert de Worker zelf niet.
-  cloudflareActief: false,
+  cloudflareActief: true,
 
   // Verstuurt de inzending via Web3Forms naar het ingestelde e-mailadres.
   // false: geen e-mail; met Cloudflare aan komt de inzending wel in de inbox.
