@@ -24,12 +24,16 @@ window.inzendingOntvangst = (() => {
     if (!attempt || attempt.fingerprint !== fingerprint) attempt = { fingerprint, id: crypto.randomUUID(), stored: false };
     if (attempt.stored) return;
     const token = widget === undefined ? '' : window.turnstile?.getResponse(widget);
-    if (!token) throw new Error('Voltooi de spamcontrole.');
+    if (!token) throw new Error(document.documentElement.lang === 'en'
+      ? 'Complete the spam check. If it is missing, reload the page and check whether your browser blocks it.'
+      : 'Voltooi de spamcontrole. Zie je die niet, herlaad de pagina en controleer of je browser deze blokkeert.');
     try {
       const response = await fetch(`${api}/submissions`, { method: 'POST', signal,
         headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...body, id: attempt.id, token }) });
       const result = await response.json();
-      if (!response.ok || result.success !== true) throw new Error('Ontvangst niet bevestigd.');
+      if (!response.ok || result.success !== true) {
+        throw new Error(typeof result.error === 'string' ? result.error.slice(0, 300) : `HTTP ${response.status}`);
+      }
       attempt.stored = true;
     } finally { window.turnstile?.reset(widget); }
   }

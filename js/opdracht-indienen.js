@@ -9,6 +9,8 @@
   const status = document.getElementById('inzendingStatus');
   let bezig = false;
   let melding = '';
+  let foutdetail = '';
+  let foutbron = '';
   const meldingen = {
     nl: {
       submit: 'Opdracht versturen', sending: 'Bezig met versturen...',
@@ -29,6 +31,7 @@
     const teksten = meldingen[document.documentElement.lang] || meldingen.nl;
     button.textContent = bezig ? teksten.sending : teksten.submit;
     status.textContent = melding ? teksten[melding] : '';
+    if (foutdetail) status.textContent += ` (${foutbron}: ${foutdetail})`;
   }
   document.addEventListener('formlanguagechange', toonMelding);
 
@@ -63,15 +66,22 @@
     bezig = true;
     button.disabled = true;
     melding = 'pending';
+    foutdetail = '';
+    foutbron = '';
     toonMelding();
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 30000);
     try {
       if (cloudflareActief) {
+        foutbron = 'Inbox';
         if (!window.inzendingOntvangst?.enabled) throw new Error('Inboxkoppeling niet beschikbaar.');
         await window.inzendingOntvangst.bewaar(data, controller.signal);
       }
       if (emailActief) {
+        foutbron = 'E-mail';
+        // This token belongs to our Worker and has already been verified there.
+        // Web3Forms has its own, separately configured captcha integration.
+        data.delete('cf-turnstile-response');
         const response = await fetch(form.action, {
           method: 'POST',
           headers: { Accept: 'application/json' },
@@ -79,12 +89,17 @@
           signal: controller.signal
         });
         const result = await response.json();
-        if (!response.ok || result.success !== true) throw new Error('Verzending niet bevestigd');
+        if (!response.ok || result.success !== true) {
+          throw new Error(typeof result.message === 'string' ? result.message.slice(0, 300) : `HTTP ${response.status}`);
+        }
       }
       form.reset();
       window.inzendingOntvangst?.reset();
       melding = 'success';
     } catch (error) {
+      foutdetail = error.name === 'AbortError'
+        ? (document.documentElement.lang === 'en' ? 'Request timed out. Please retry.' : 'De aanvraag duurde te lang. Probeer opnieuw.')
+        : String(error.message || 'Verbindingsfout').slice(0, 300);
       melding = cloudflareActief && emailActief && window.inzendingOntvangst?.opgeslagen() ? 'partial' : 'error';
     } finally {
       clearTimeout(timeout);
