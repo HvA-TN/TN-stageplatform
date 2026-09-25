@@ -4,7 +4,7 @@ const digest = async value => new Uint8Array(await crypto.subtle.digest('SHA-256
 const hex = bytes => Array.from(bytes, byte => byte.toString(16).padStart(2, '0')).join('');
 
 async function authorised(request, env) {
-  if (!env.REVIEW_TOKEN || env.REVIEW_TOKEN.length < 8) return false;
+  if (!env.REVIEW_TOKEN || env.REVIEW_TOKEN.length < 8 || env.REVIEW_TOKEN.length > 33) return false;
   const header = request.headers.get('Authorization') || '';
   if (!header.startsWith('Bearer ') || header.length > 1024) return false;
   const [actual, expected] = await Promise.all([digest(header.slice(7)), digest(env.REVIEW_TOKEN)]);
@@ -101,6 +101,9 @@ export default {
         return reply({ success: true, id: parsed.id }, 201);
       }
       if (path === '/submissions' || path.startsWith('/submissions/')) {
+        if (!env.REVIEW_TOKEN || env.REVIEW_TOKEN.length < 8 || env.REVIEW_TOKEN.length > 33) {
+          return reply({ error: 'Inbox niet goed ingesteld. Controleer de secret REVIEW_TOKEN (hoofdletters, 8 tot en met 33 tekens) en deploy de Worker opnieuw.' }, 503);
+        }
         if (!await authorised(request, env)) return reply({ error: 'Geen toegang tot inzendingen.' }, 401);
         if (request.method === 'GET' && path === '/submissions') {
           const params = new URL(request.url).searchParams;

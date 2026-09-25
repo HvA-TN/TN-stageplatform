@@ -73,9 +73,10 @@
           <p>Nieuwe inzendingen staan hier privé. Overnemen is nog geen publicatie.</p>
           <label for="beoordelingenToken">Toegangscode inbox</label>
           <div class="password-input-row">
-            <input id="beoordelingenToken" class="search-input" type="password" autocomplete="off">
+            <input id="beoordelingenToken" class="search-input" type="password" autocomplete="off" minlength="8" maxlength="33" aria-describedby="inboxWachtwoordHint">
             <button class="search-reset-button" type="button" data-password-toggle="beoordelingenToken" aria-controls="beoordelingenToken" aria-pressed="false">Tonen</button>
           </div>
+          <p id="inboxWachtwoordHint">Gebruik de inboxcode uit Cloudflare: 8 tot en met 33 tekens.</p>
           <button id="beoordelingenOpenen" class="search-reset-button" type="button">Inbox openen</button>
           <div id="beoordelingenInhoud" hidden>
             <div class="opdracht-index-actions">

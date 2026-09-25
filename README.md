@@ -232,7 +232,7 @@ Voeg bij Bindings een D1 database toe met variabelenaam `DB`, gekoppeld aan
 | Naam | Type | Waarde |
 | --- | --- | --- |
 | SITE_ORIGIN | Text | `https://hva-tn.github.io` (zonder pad of afsluitende slash) |
-| REVIEW_TOKEN | Secret | Een toegangscode van minimaal 8 tekens, zonder verdere samenstellingseisen |
+| REVIEW_TOKEN | Secret | Een toegangscode van 8 tot en met 33 tekens, zonder verdere samenstellingseisen |
 | TURNSTILE_SECRET | Secret | De geheime sleutel uit stap 3 |
 
 REVIEW_TOKEN is apart van het adminwachtwoord voor het versleutelde bestand.

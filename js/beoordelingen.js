@@ -78,8 +78,11 @@
   el('beoordelingenOpenen').addEventListener('click', () => {
     if (busy) return;
     const input = el('beoordelingenToken');
-    if (!input.value) { input.focus(); return; }
-    token = input.value.trim(); input.value = '';
+    if (input.value.length < 8 || input.value.length > 33) {
+      message.textContent = 'Vul een inboxcode van 8 tot en met 33 tekens in.';
+      input.focus(); return;
+    }
+    token = input.value; input.value = '';
     controller?.abort(); controller = new AbortController(); page = 0; load();
   });
   el('beoordelingenVerversen').addEventListener('click', load);
