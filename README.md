@@ -1,5 +1,7 @@
 # TN Stageplatform
 
+Website: [TN Stageplatform](https://hva-tn.github.io/TN-stageplatform/)
+
 Handleiding voor beheer en onderhoud van het stageplatform van Technische Natuurkunde.
 Deze README wordt samen met de website in de repository gepubliceerd.
 
