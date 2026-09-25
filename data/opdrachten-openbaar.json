@@ -1,0 +1,22 @@
+[
+  {
+    "titel": "Template: titel van de opdracht",
+    "bedrijf": "Naam bedrijf of instelling",
+    "locatie": "Plaats",
+    "type": "Stage/Afstuderen",
+    "periode": "In overleg",
+    "domein": [
+      "High-tech systemen & materialen"
+    ],
+    "keywords": [
+      "Trefwoord 1",
+      "Trefwoord 2"
+    ],
+    "beschrijving": "Beschrijf hier de organisatie, de aanleiding en het doel van de opdracht. Licht de werkzaamheden, de natuurkundige inhoud, de verwachte resultaten en de beschikbare begeleiding toe. Vervang alle voorbeeldteksten voordat je de status op open zet.",
+    "contact": "",
+    "docent": "Naam van de begeleidende docent",
+    "uploaddatum": "2026-09-24",
+    "status": "closed",
+    "id": "OpdrachtID001"
+  }
+]

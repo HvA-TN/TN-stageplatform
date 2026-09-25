@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opdrachtenbestand beheren</title>
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
+    <header class="subpage-header">
+      <a href="index.html" class="back-link">
+        <img src="images/icons/left_arrow.svg" class="back-icon" alt="" width="26" height="26">
+        <span>Home</span>
+      </a>
+      <button id="beheerSluiten" class="search-reset-button admin-logout" type="button" hidden>Uitloggen</button>
+      <button id="darkToggle" class="dark-toggle" type="button" aria-label="Wissel thema">
+        <img id="themeIcon" src="images/icons/darkmode.svg" alt="" width="30" height="30">
+      </button>
+    </header>
+    <main class="info-page submission-page assignment-admin-page">
+      <section class="info-card">
+        <h1 id="beheerTitel">Inloggen voor beheer</h1>
+        <form id="beheerOpen" class="access-form">
+          <label for="beheerNaam">Adminnaam</label>
+          <input id="beheerNaam" name="admin_username" class="search-input" autocomplete="section-admin username" required>
+          <label for="beheerSleutel">Adminaccount — adminwachtwoord</label>
+          <div class="password-input-row">
+            <input id="beheerSleutel" name="admin_password" class="search-input" type="password" autocomplete="section-admin current-password" required>
+            <button class="search-reset-button" type="button" data-password-toggle="beheerSleutel" aria-controls="beheerSleutel" aria-pressed="false">Tonen</button>
+          </div>
+          <button class="search-reset-button" type="submit">Inloggen</button>
+        </form>
+        <form id="beheerOpslaan" class="access-form assignment-admin-layout" hidden>
+          <section class="assignment-admin-block" aria-labelledby="opdrachtOverzichtTitel">
+            <h2 id="opdrachtOverzichtTitel">Opdrachtenoverzicht</h2>
+            <label for="opdrachtZoeken">Zoek op ID, titel of bedrijf</label>
+            <input id="opdrachtZoeken" class="search-input" type="search" placeholder="Zoek een opdracht">
+            <label for="opdrachtIndex">Opdracht kiezen</label>
+            <select id="opdrachtIndex" class="search-input" size="7"></select>
+            <div class="opdracht-index-actions">
+              <button id="opdrachtToevoegen" class="search-reset-button" type="button">Nieuwe opdracht</button>
+              <button id="opdrachtPlakToggle" class="search-reset-button" type="button" aria-expanded="false" aria-controls="opdrachtPlakkenPaneel">JSON uit e-mail</button>
+              <button id="opdrachtVerwijderen" class="search-reset-button" type="button">Verwijderen</button>
+            </div>
+            <div id="opdrachtPlakkenPaneel" class="assignment-paste" hidden>
+              <label for="opdrachtPlakJson">Kopieer de inhoud van opdracht_json, van { tot en met }.</label>
+              <textarea id="opdrachtPlakJson" rows="8" spellcheck="false" placeholder='{"titel": "..."}'></textarea>
+              <button id="opdrachtPlakImporteren" class="search-reset-button" type="button">Importeren</button>
+              <p id="opdrachtPlakStatus" role="status"></p>
+            </div>
+          </section>
+          <section class="assignment-admin-block" aria-labelledby="opdrachtBewerkenTitel">
+            <div class="assignment-admin-heading">
+              <h2 id="opdrachtBewerkenTitel">Opdracht bewerken</h2>
+              <span id="opdrachtLabel" class="assignment-admin-id">Geen selectie</span>
+            </div>
+            <textarea id="beheerJson" rows="22" spellcheck="false" aria-labelledby="opdrachtBewerkenTitel opdrachtLabel"></textarea>
+          </section>
+          <div class="assignment-admin-save assignment-admin-save-all">
+            <button id="beheerOpslaanKnop" class="search-reset-button" type="submit">Wijzigingen opslaan</button>
+            <span>Downloadt de volledige lijst, versleuteld.</span>
+          </div>
+        </form>
+        <p id="beheerStatus" role="status"></p>
+        <section id="beheerBevestiging" class="info-card" hidden aria-labelledby="opgeslagenTitel">
+          <h2 id="opgeslagenTitel">Download klaar</h2>
+          <p id="beheerResultaat"></p>
+          <a id="beheerDownload" class="search-reset-button" download="opdrachten.json">Download opnieuw</a>
+          <p>Een nieuwe sessie laadt de gepubliceerde versie. Publiceer dus eerst je wijzigingen.</p>
+        </section>
+        <section id="beoordelingen" class="assignment-admin-block" hidden aria-labelledby="beoordelingenTitel">
+          <h2 id="beoordelingenTitel">Te beoordelen</h2>
+          <p>Nieuwe inzendingen staan hier privé. Overnemen is nog geen publicatie.</p>
+          <label for="beoordelingenToken">Toegangscode inbox</label>
+          <div class="password-input-row">
+            <input id="beoordelingenToken" class="search-input" type="password" autocomplete="off">
+            <button class="search-reset-button" type="button" data-password-toggle="beoordelingenToken" aria-controls="beoordelingenToken" aria-pressed="false">Tonen</button>
+          </div>
+          <button id="beoordelingenOpenen" class="search-reset-button" type="button">Inbox openen</button>
+          <div id="beoordelingenInhoud" hidden>
+            <div class="opdracht-index-actions">
+              <select id="beoordelingenFilter" class="search-input" aria-label="Status inzendingen">
+                <option value="pending">Te beoordelen</option>
+                <option value="archived">Afgehandeld</option>
+              </select>
+              <button id="beoordelingenVerversen" class="search-reset-button" type="button">Verversen</button>
+            </div>
+            <div id="beoordelingenLijst" class="access-form"></div>
+            <div class="opdracht-index-actions">
+              <button id="beoordelingenVorige" class="search-reset-button" type="button">Vorige</button>
+              <button id="beoordelingenVolgende" class="search-reset-button" type="button">Volgende</button>
+            </div>
+          </div>
+          <p id="beoordelingenStatus" role="status"></p>
+        </section>
+      </section>
+    </main>
+    <script src="js/theme.js"></script>
+    <script src="js/wachtwoord-tonen.js"></script>
+    <script src="js/site-instellingen.js"></script>
+    <script src="js/opdracht-toegang.js"></script>
+    <script src="js/opdracht-crypto.js"></script>
+    <script src="js/opdracht-formaat.js"></script>
+    <script src="js/beoordelingen.js"></script>
+    <script src="js/opdrachten-index.js"></script>
+  </body>
+</html>

@@ -1,17 +1,10 @@
 const zoekInput = document.getElementById('zoekInput');
 const resetZoekopdracht = document.getElementById('resetZoekopdracht');
 const zoekStatus = document.getElementById('zoekStatus');
-const domeinLijst = document.getElementById('domeinLijst');
+const bedrijvenLijst = document.getElementById('bedrijvenLijst');
+const typeFilter = document.getElementById('typeFilter');
+const tagFilter = document.getElementById('tagFilter');
 const provincieFilter = document.getElementById('provincieFilter');
-
-const domeinen = [
-  "High-tech systemen & materialen",
-  "Data & digitalisering",
-  "Energie & duurzaamheid",
-  "Gezondheid & medische technologie",
-  "Aarde, klimaat & ruimte",
-  "Veiligheid & defensie"
-];
 
 let alleBedrijven = [];
 
@@ -55,19 +48,22 @@ function bedrijfMatchtZoekterm(bedrijf, zoekterm) {
     bedrijf.provincie || '',
     bedrijf.beschrijving || '',
     ...asArray(bedrijf.tags),
-    ...asArray(bedrijf.type)
+    ...asArray(bedrijf.type),
+    ...asArray(bedrijf.docenten)
   ]
     .join(' ')
     .toLowerCase();
 
-  return tekst.includes(zoekterm.toLowerCase());
+  return zoekterm.toLowerCase().split(/\s+/).filter(Boolean).every(term => tekst.includes(term));
 }
 
-function filterBedrijven(bedrijven, zoekterm = '', provincie = '') {
+function filterBedrijven(bedrijven, zoekterm = '', provincie = '', type = '', domeinen = []) {
   return bedrijven.filter((bedrijf) => {
     const matchZoek = bedrijfMatchtZoekterm(bedrijf, zoekterm);
     const matchProvincie = !provincie || bedrijf.provincie === provincie;
-    return matchZoek && matchProvincie;
+    return matchZoek && matchProvincie &&
+      (!type || asArray(bedrijf.type).includes(type)) &&
+      (!domeinen.length || domeinen.some(domein => asArray(bedrijf.tags).includes(domein)));
   });
 }
 
@@ -79,6 +75,7 @@ function maakBedrijfHtml(bedrijf) {
     bedrijf.beschrijving || 'Geen beschrijving beschikbaar.'
   );
 
+  const docenten = asArray(bedrijf.docenten).filter(Boolean).map(escapeHtml);
   const locatie = provincie ? `${plaats}, ${provincie}` : plaats;
 
   let linksHtml = '';
@@ -109,163 +106,72 @@ function maakBedrijfHtml(bedrijf) {
         <div class="company-list-place">${locatie}</div>
       </div>
       <p>${beschrijving}</p>
+      ${docenten.length ? `<p class="company-list-teachers"><strong>${docenten.length === 1 ? 'Docent' : 'Docenten'}:</strong> ${docenten.join(', ')}</p>` : ''}
       ${linksHtml ? `<div class="company-list-links">${linksHtml}</div>` : ''}
     </article>
   `;
 }
 
-function updateZoekStatus(aantalResultaten, zoekterm, provincie) {
-  if (!zoekStatus) return;
-
-  const heeftZoekterm = Boolean(zoekterm);
-  const heeftProvincie = Boolean(provincie);
-
-  if (!heeftZoekterm && !heeftProvincie) {
-    zoekStatus.innerHTML = '';
-    return;
-  }
-
-  const label = aantalResultaten === 1 ? 'organisatie' : 'organisaties';
-
-  if (aantalResultaten === 0) {
-    const filters = [
-      heeftZoekterm ? `<strong>${escapeHtml(zoekterm)}</strong>` : '',
-      heeftProvincie ? `<strong>${escapeHtml(provincie)}</strong>` : ''
-    ].filter(Boolean).join(' in ');
-
-    zoekStatus.innerHTML = `
-      <section class="info-card">
-        <p>Geen organisaties gevonden voor ${filters}.</p>
-      </section>
-    `;
-    return;
-  }
-
-  let filterTekst = '';
-  if (heeftZoekterm && heeftProvincie) {
-    filterTekst = ` voor <strong>${escapeHtml(zoekterm)}</strong> in <strong>${escapeHtml(provincie)}</strong>`;
-  } else if (heeftZoekterm) {
-    filterTekst = ` voor <strong>${escapeHtml(zoekterm)}</strong>`;
-  } else if (heeftProvincie) {
-    filterTekst = ` in <strong>${escapeHtml(provincie)}</strong>`;
-  }
-
-  zoekStatus.innerHTML = `
-    <section class="info-card">
-      <p>${aantalResultaten} ${label} gevonden${filterTekst}.</p>
-    </section>
-  `;
+function vulKeuzes(select, waarden, label) {
+  select.innerHTML = `<option value="">${label}</option>` +
+    [...new Set(waarden)].filter(Boolean).sort((a, b) => a.localeCompare(b, 'nl'))
+      .map(waarde => `<option value="${escapeHtml(waarde)}">${escapeHtml(waarde === 'onderzoek' ? 'Onderzoeksinstituut' : waarde === 'bedrijf' ? 'Bedrijf' : waarde)}</option>`).join('');
 }
 
-function renderDomeinen(bedrijven, zoekterm = '', provincie = '') {
-  if (!domeinLijst) return;
+function vulDomeinen(bedrijven) {
+  const domeinen = [...new Set(bedrijven.flatMap(b => asArray(b.tags)))].filter(Boolean)
+    .sort((a, b) => a.localeCompare(b, 'nl'));
+  tagFilter.innerHTML = domeinen.map(domein => `
+    <label class="tag-filter-option">
+      <input type="checkbox" value="${escapeHtml(domein)}">
+      <span>${escapeHtml(domein)}</span>
+    </label>`).join('');
+}
 
-  const gefilterdeBedrijven = filterBedrijven(bedrijven, zoekterm, provincie);
+function geselecteerdeDomeinen() {
+  return [...tagFilter.querySelectorAll('input[type="checkbox"]:checked')].map(veld => veld.value);
+}
 
-  updateZoekStatus(gefilterdeBedrijven.length, zoekterm, provincie);
-
-  const html = domeinen.map((domein) => {
-    const bedrijvenInDomein = gefilterdeBedrijven
-      .filter((bedrijf) => asArray(bedrijf.tags).includes(domein))
-      .sort((a, b) => (a.naam || '').localeCompare(b.naam || '', 'nl'));
-
-    const itemsHtml = bedrijvenInDomein.length > 0
-      ? bedrijvenInDomein.map(maakBedrijfHtml).join('')
-      : '<p class="company-list-empty">Geen organisaties gevonden binnen dit domein.</p>';
-
-    const autoOpen = (zoekterm || provincie) && bedrijvenInDomein.length > 0
-      ? 'open'
-      : '';
-
-    return `
-      <details class="accordion-item" ${autoOpen}>
-        <summary>${escapeHtml(domein)} (${bedrijvenInDomein.length})</summary>
-        <div class="accordion-content">
-          <div class="company-list">
-            ${itemsHtml}
-          </div>
-        </div>
-      </details>
-    `;
-  }).join('');
-
-  domeinLijst.innerHTML = html;
+function renderBedrijven() {
+  const gevonden = filterBedrijven(alleBedrijven, zoekInput.value.trim(),
+    provincieFilter.value, typeFilter.value, geselecteerdeDomeinen())
+    .sort((a, b) => (a.naam || '').localeCompare(b.naam || '', 'nl') ||
+      (a.plaats || '').localeCompare(b.plaats || '', 'nl'));
+  zoekStatus.textContent = `${gevonden.length} van ${alleBedrijven.length} organisaties`;
+  bedrijvenLijst.innerHTML = gevonden.length
+    ? gevonden.map(maakBedrijfHtml).join('')
+    : '<p class="company-list-empty">Geen organisaties gevonden. Pas je zoekopdracht aan of wis de filters.</p>';
 }
 
 function resetZoeken() {
-  if (zoekInput) {
-    zoekInput.value = '';
-  }
+  [zoekInput, provincieFilter, typeFilter].forEach(veld => { veld.value = ''; });
+  tagFilter.querySelectorAll('input[type="checkbox"]').forEach(veld => { veld.checked = false; });
+  renderBedrijven();
+  zoekInput.focus();
+}
 
-  if (provincieFilter) {
-    provincieFilter.value = '';
-  }
+zoekInput.addEventListener('input', renderBedrijven);
+zoekInput.addEventListener('keydown', event => {
+  if (event.key === 'Escape') resetZoeken();
+});
+[provincieFilter, typeFilter, tagFilter].forEach(veld => {
+  veld.addEventListener('change', renderBedrijven);
+});
+resetZoekopdracht.addEventListener('click', resetZoeken);
 
-  renderDomeinen(alleBedrijven, '', '');
-
-  if (zoekInput) {
-    zoekInput.focus();
+async function laadBedrijven() {
+  try {
+    const response = await fetch('data/bedrijven.json');
+    if (!response.ok) throw new Error(`Kon bedrijven.json niet laden: ${response.status}`);
+    alleBedrijven = await response.json();
+    vulProvincies(alleBedrijven);
+    vulKeuzes(typeFilter, alleBedrijven.flatMap(b => asArray(b.type)), 'Alle types');
+    vulDomeinen(alleBedrijven);
+    renderBedrijven();
+  } catch (error) {
+    console.error(error);
+    zoekStatus.textContent = 'De bedrijven konden niet worden geladen. Vernieuw de pagina om het opnieuw te proberen.';
   }
 }
 
-function huidigeZoekterm() {
-  return zoekInput ? zoekInput.value.trim() : '';
-}
-
-function huidigeProvincie() {
-  return provincieFilter ? provincieFilter.value : '';
-}
-
-function initialiseerEvents() {
-  if (zoekInput) {
-    zoekInput.addEventListener('input', () => {
-      renderDomeinen(alleBedrijven, huidigeZoekterm(), huidigeProvincie());
-    });
-
-    zoekInput.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape') {
-        resetZoeken();
-      }
-    });
-  }
-
-  if (provincieFilter) {
-    provincieFilter.addEventListener('change', () => {
-      renderDomeinen(alleBedrijven, huidigeZoekterm(), huidigeProvincie());
-    });
-  }
-
-  if (resetZoekopdracht) {
-    resetZoekopdracht.addEventListener('click', resetZoeken);
-  }
-
-
-}
-
-function laadBedrijven() {
-  fetch('data/bedrijven.json')
-    .then((res) => {
-      if (!res.ok) {
-        throw new Error(`Kon bedrijven.json niet laden: ${res.status}`);
-      }
-      return res.json();
-    })
-    .then((bedrijven) => {
-      alleBedrijven = bedrijven;
-      vulProvincies(alleBedrijven);
-      renderDomeinen(alleBedrijven, huidigeZoekterm(), huidigeProvincie());
-    })
-    .catch((err) => {
-      console.error(err);
-      if (domeinLijst) {
-        domeinLijst.innerHTML = `
-          <section class="info-card">
-            <p>Fout bij laden van bedrijven.</p>
-          </section>
-        `;
-      }
-    });
-}
-
-initialiseerEvents();
 laadBedrijven();

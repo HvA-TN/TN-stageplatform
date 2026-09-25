@@ -1,128 +1,85 @@
 <!DOCTYPE html>
 <html lang="nl">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bedrijvenkaart - Technische Natuurkunde</title>
-
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  >
-
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"
-  >
-
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"
-  >
-
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bedrijvenkaart - Technische Natuurkunde</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" >
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" >
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" >
     <link rel="stylesheet" href="css/style.css">
-
-</head>
-
-<body>
-
-<header class="subpage-header">
-
-  <a href="index.html" class="back-link">
-    <img src="images/icons/left_arrow.svg"
-         class="back-icon"
-         alt=""
-         width="26"
-         height="26">
-
-    <span>Kaart</span>
-  </a>
-
-</header>
-
-<div id="kaartView">
-
-  <section class="hero-filters">
-    <div class="hero-filters-inner">
-
-      <div class="filter-group filter-group-type">
-        <label for="typeFilter">Type organisatie</label>
-        <select id="typeFilter">
-          <option value="alles">Alles</option>
-          <option value="bedrijf">Bedrijf</option>
-          <option value="onderzoek">Onderzoeksinstituut</option>
-        </select>
-      </div>
-
-      <div class="filter-group filter-group-provincie">
-        <label for="provincieFilter">Regio</label>
-        <select id="provincieFilter">
-          <option value="alles">Alle regios</option>
-        </select>
-      </div>
-
-      <div class="filter-group filter-group-tags">
-        <label>Domein</label>
-
-        <div class="tag-filter-row">
-
-          <div class="filter-actions-column">
-            <button id="resetFilters" class="tag-filter-option" type="button">
+  </head>
+  <body>
+    <header class="subpage-header">
+      <a href="index.html" class="back-link">
+        <img src="images/icons/left_arrow.svg" class="back-icon" alt="" width="26" height="26">
+        <span>Kaart</span>
+      </a>
+      <button id="darkToggle" class="dark-toggle" type="button" aria-label="Wissel thema">
+        <img id="themeIcon" src="images/icons/darkmode.svg" alt="" width="30" height="30">
+      </button>
+    </header>
+    <div id="kaartView">
+      <section class="hero-filters">
+        <div class="hero-filters-inner">
+          <div class="filter-group filter-group-type">
+            <label for="typeFilter">Type organisatie</label>
+            <select id="typeFilter">
+              <option value="alles">Alles</option>
+              <option value="bedrijf">Bedrijf</option>
+              <option value="onderzoek">Onderzoeksinstituut</option>
+            </select>
+          </div>
+          <div class="filter-group filter-group-provincie">
+            <label for="provincieFilter">Regio</label>
+            <select id="provincieFilter">
+              <option value="alles">Alle regios</option>
+            </select>
+          </div>
+          <div class="filter-group filter-group-tags">
+            <label>Domein</label>
+            <div class="tag-filter-row">
+              <div class="filter-actions-column">
+                <button id="resetFilters" class="tag-filter-option" type="button">
               Reset
             </button>
-
-            <button id="favorietenFilter" class="tag-filter-option" type="button">
+                <button id="favorietenFilter" class="tag-filter-option" type="button">
               ★ Favorieten
             </button>
+              </div>
+              <div id="tagFilter" class="tag-filter-list"></div>
+            </div>
           </div>
-
-          <div id="tagFilter" class="tag-filter-list"></div>
-
         </div>
-      </div>
-
+      </section>
+      <main class="content-layout">
+        <div class="map-wrapper">
+          <div id="map"></div>
+        </div>
+        <aside class="sidepanel" id="sidepanel">
+          <div class="sidepanel-placeholder">
+            <h2>Bedrijfsinformatie</h2>
+            <p>Klik op een marker om uitgebreide informatie te bekijken.</p>
+          </div>
+        </aside>
+      </main>
     </div>
-  </section>
-
-  <main class="content-layout">
-
-    <div class="map-wrapper">
-      <div id="map"></div>
-    </div>
-
-    <aside class="sidepanel" id="sidepanel">
-      <div class="sidepanel-placeholder">
-        <h2>Bedrijfsinformatie</h2>
-        <p>Klik op een marker om uitgebreide informatie te bekijken.</p>
-      </div>
-    </aside>
-
-  </main>
-
-</div>
-
-<section class="favorieten-lijst">
-  <h2>Favorieten</h2>
-  <div id="favorietenContainer" class="company-list"></div>
-</section>
-
-<footer>
-  <div class="footer-section">
-    <h3>Feedback</h3>
-    <p>
+    <section class="favorieten-lijst">
+      <h2>Favorieten</h2>
+      <div id="favorietenContainer" class="company-list"></div>
+    </section>
+    <footer>
+      <div class="footer-section">
+        <h3>Feedback</h3>
+        <p>
       Mis je een bedrijf of opdracht, of klopt er iets niet?
       Laat het weten via <a href="mailto:j.busink@hva.nl">Neem contact op</a>.
     </p>
-  </div>
-</footer>
-
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
-
-<script src="js/theme.js"></script>
-<script src="js/main.js"></script>
-
-</body>
-
+      </div>
+    </footer>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/map.js"></script>
+  </body>
 </html>

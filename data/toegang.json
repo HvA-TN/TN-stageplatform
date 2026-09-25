@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "salt": "+ntgJrG9hI9+PhVE+NZs2g==",
+  "revision": "we4T8EKdhoVjUS4sQ7bf2w==",
+  "guest": {
+    "mode": "wrapped",
+    "envelope": {
+      "version": 1,
+      "algorithm": "AES-GCM",
+      "iterations": 600000,
+      "salt": "H67YS/qnOPyDYqWe/CUzuw==",
+      "iv": "H6MdcXM41vxMeC6c",
+      "ciphertext": "iinffbzHfBRPBoEYgUlTkQI7qdevUnKbXM/2MVYKLxXURl5u615kjpoyI8VBT+hyjwwxjwPqzgXYzS7RqSd3SXaxTjk7IWFNoUwgA1DAL3LdxX7lWXdhRSOn6aha3Z/aOCRW4ys2I6aJfg=="
+    }
+  },
+  "master": {
+    "version": 1,
+    "algorithm": "AES-GCM",
+    "iterations": 600000,
+    "salt": "wgeELNpfwCz0lOppneByWw==",
+    "iv": "xxNFhIQL9Q531reP",
+    "ciphertext": "KEz5WVVRpNZpldbTHr15i/3WH+BYYOSSH7Ta3+Daxe8XHUGu9jlJacsUXOTMS57lqCY91KVTVhWlfwThe503SsYYbM8qSVWVprnPhRVVBo+9rPZ8paHQkQKW2eSXTQRlAqinnbvjmEQl2g=="
+  }
+}

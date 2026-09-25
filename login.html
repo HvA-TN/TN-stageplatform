@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toegang tot opdrachten - Technische Natuurkunde</title>
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
+    <header class="subpage-header">
+      <a href="index.html" class="back-link">Home</a>
+      <button id="darkToggle" class="dark-toggle" type="button" aria-label="Wissel thema">
+        <img id="themeIcon" src="images/icons/darkmode.svg" alt="" width="30" height="30">
+      </button>
+    </header>
+    <main class="info-page submission-page">
+      <section class="info-card access-card">
+        <h1>Gastaccount — opdrachten bekijken</h1>
+        <p>Vul het wachtwoord in om de stage- en afstudeeropdrachten te bekijken.</p>
+        <form id="toegangForm" class="access-form">
+          <label for="studentnummer">Studentnummer</label>
+          <input id="studentnummer" name="guest_username" class="search-input" type="text" inputmode="text" pattern="([0-9]{9}|[A-Za-z]{9})" minlength="9" maxlength="9" placeholder="500123456" autocomplete="section-guest username" required>
+          <label for="toegangSleutel">Wachtwoord:</label>
+          <div class="password-input-row">
+            <input id="toegangSleutel" name="guest_password" class="search-input" type="password" autocomplete="section-guest current-password" required>
+            <button class="search-reset-button" type="button" data-password-toggle="toegangSleutel" aria-controls="toegangSleutel" aria-pressed="false">Tonen</button>
+          </div>
+          <button id="toegangKnop" class="search-reset-button" type="submit">Opdrachten openen</button>
+        </form>
+        <p id="toegangStatus" role="status" aria-live="polite"></p>
+        <p>Geen wachtwoord? Vraag dit aan de stagecoördinator.</p>
+        <noscript>Schakel JavaScript in om in te loggen.</noscript>
+      </section>
+    </main>
+    <script src="js/theme.js"></script>
+    <script src="js/wachtwoord-tonen.js"></script>
+    <script src="js/site-instellingen.js"></script>
+    <script src="js/opdracht-toegang.js"></script>
+    <script src="js/opdracht-crypto.js"></script>
+    <script src="js/login.js"></script>
+  </body>
+</html>

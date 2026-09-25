@@ -1,198 +1,148 @@
 <!DOCTYPE html>
 <html lang="nl">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Stage-informatie Technische Natuurkunde</title>
-  <link rel="stylesheet" href="css/style.css">
-</head>
-
-<body>
-
-<header class="homebar">
-  <div class="homebar-inner">
-
-    <div class="homebar-left">
-      <button id="menuToggle" class="menu-toggle" type="button" aria-label="Open menu">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-
-      <h1>Home</h1>
-    </div>
-
-<button id="darkToggle" class="dark-toggle" type="button" aria-label="Wissel thema">
-    <img
-        id="themeIcon"
-        src="images/icons/darkmode.svg"
-        alt=""
-        width="30"
-        height="30">
-</button>
-
-  </div>
-</header>
-
-<div id="menuOverlay" class="menu-overlay"></div>
-
-<aside id="sideMenu" class="side-menu">
-  <button id="menuClose" class="menu-close" type="button" aria-label="Sluit menu">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stage-informatie Technische Natuurkunde</title>
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body class="home-body">
+    <header class="homebar">
+      <div class="homebar-inner">
+        <div class="homebar-left">
+          <button id="menuToggle" class="menu-toggle" type="button" aria-label="Open menu">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+          <h1>Home</h1>
+        </div>
+        <button id="darkToggle" class="dark-toggle" type="button" aria-label="Wissel thema">
+          <img id="themeIcon" src="images/icons/darkmode.svg" alt="" width="30" height="30">
+        </button>
+      </div>
+    </header>
+    <div id="menuOverlay" class="menu-overlay"></div>
+    <aside id="sideMenu" class="side-menu">
+      <button id="menuClose" class="menu-close" type="button" aria-label="Sluit menu">
     ×
   </button>
-
-  <h2>Menu</h2>
-
-<nav class="side-menu-links">
-
-  <a href="index.html">
-    <img src="images/icons/home.svg" class="side-menu-icon" alt="">
-    <span>Home</span>
-  </a>
-
-  <a href="map.html">
-    <img src="images/icons/map.svg" class="side-menu-icon" alt="">
-    <span>Kaart</span>
-  </a>
-
-  <a href="lijst.html">
-    <img src="images/icons/list.svg" class="side-menu-icon" alt="">
-    <span>Lijst</span>
-  </a>
-
-  <a href="opdrachten.html">
-    <img src="images/icons/opdrachten.svg" class="side-menu-icon" alt="">
-    <span>Opdrachten</span>
-  </a>
-
-  <!-- <a href="data.html">
-  <img src="images/icons/dashboard.svg" class="side-menu-icon" alt="">
-  <span>Dashboard</span> -->
-</a>
-</nav>
-</aside>
-
-<main class="info-page">
-
-  <section class="info-card">
-    <h2>Stage-informatie</h2>
-    <p>
+      <h2>Menu</h2>
+      <nav class="side-menu-links">
+        <a href="index.html">
+          <img src="images/icons/home.svg" class="side-menu-icon" alt="">
+          <span>Home</span>
+        </a>
+        <a href="map.html">
+          <img src="images/icons/map.svg" class="side-menu-icon" alt="">
+          <span>Kaart</span>
+        </a>
+        <a href="lijst.html">
+          <img src="images/icons/list.svg" class="side-menu-icon" alt="">
+          <span>Lijst</span>
+        </a>
+        <a href="opdrachten.html">
+          <img src="images/icons/opdrachten.svg" class="side-menu-icon" alt="">
+          <span>Opdrachten</span>
+        </a>
+        <a href="opdracht-aanbieden.html" data-submission-link hidden>
+          <img src="images/icons/intern.svg" class="side-menu-icon" alt="">
+          <span>Aanbieden</span>
+        </a>
+      </nav>
+    </aside>
+    <main class="info-page home-page">
+      <section class="info-card home-guide" aria-labelledby="stageTitel">
+        <h2 id="stageTitel">Vind jouw stage</h2>
+        <nav class="home-shortcuts" aria-label="Stage zoeken">
+          <a href="opdrachten.html">Bekijk opdrachten</a>
+          <a href="map.html">Bedrijvenkaart</a>
+          <a href="lijst.html">Bedrijvenlijst</a>
+        </nav>
+        <p>
       Een stage richt zich op onderzoek, ontwikkeling, metingen,
       modellering of systeemintegratie binnen een professionele omgeving in het Technische Natuurkunde-domein.
       Zorg ervoor dat je SLB-docent op de hoogte is van je zoekproces en laat je stageopdracht altijd controleren door de stagecoördinator.
     </p>
-  </section>
-
-  <section class="accordion">
-
-    <details class="accordion-item">
-      <summary>Waar moet een stageplek aan voldoen?</summary>
-      <div class="accordion-content">
-        <ul>
-          <li>20 weken fulltime, start in september of februari</li>
-          <li>Technische inhoud: R&amp;D, metingen, modellering of systeemintegratie</li>
-          <li>Begeleiding vanuit bedrijf, instituut of onderzoeksgroep</li>
-          <li>Relevantie voor Technische Natuurkunde</li>
-          <li>Ruimte voor inhoudelijke en professionele groei</li>
-        </ul>
-      </div>
-    </details>
-
-    <details class="accordion-item">
-      <summary>Hoe vind je een stage?</summary>
-      <div class="accordion-content">
-        <ul>
-          <li>Gebruik de info-, kaart-, lijst- en opdrachtenpagina</li>
-          <li>Bekijk bedrijven, onderzoeksinstituten en beschikbare opdrachten</li>
-          <li>Neem contact op via e-mail of website</li>
-          <li>Bespreek ideeën met je SLB-docent</li>
-          <li>Laat een mogelijke opdracht inhoudelijk controleren door de stagecoördinator</li>
-        </ul>
-      </div>
-    </details>
-
-    <details class="accordion-item">
-      <summary>Tips</summary>
-      <div class="accordion-content">
-        <ul>
-          <li>Begin 2–3 maanden vooraf</li>
-          <li>Wees proactief in contact opnemen</li>
-          <li>Denk na over je technische interesses</li>
-          <li>Gebruik je netwerk</li>
-          <li>Bekijk regelmatig de pagina met openstaande opdrachten</li>
-          <li>Loop je vast? Neem contact op met je SLB-docent</li>
-        </ul>
-      </div>
-    </details>
-
-
-  <details class="accordion-item">
-    <summary>Stappenplan</summary>
-    <div class="accordion-content">
-      <ul>
-        <li>Ben je van plan om komend semester stage te lopen? Informeer dan zo vroeg mogelijk je SLB-docent, ook als je plannen nog niet definitief zijn.</li>
-        <li>Zoek één of meerdere interessante stagebedrijven. Kom je hier niet uit? Bespreek dit dan met je SLB-docent.</li>
-        <li>Stuur je cv en motivatie naar de bedrijven van je keuze. Twijfel je over de inhoud? Vraag dan feedback aan je SLB-docent.</li>
-        <li>Heb je een positief gesprek gehad en een geschikte stageopdracht gevonden? Zorg ervoor dat de opdracht schriftelijk is vastgelegd en stuur deze naar <a href="mailto:j.busink@hva.nl">j.busink@hva.nl</a>.</li>
-        <li>Stuur vervolgens een e-mail naar zowel de opdrachtgever als <a href="mailto:j.busink@hva.nl">j.busink@hva.nl</a>, waarin je aangeeft dat je de stage wilt gaan uitvoeren.</li>
-        <li>Vanaf dit moment neemt de stagecoördinator het contact met de opdrachtgever over en verzorgt de afstemming over de haalbaarheid, de stageovereenkomst en overige administratieve zaken.</li>
-      </ul>
-    </div>
-  </details>
-  </section>
-
-</main>
-
-<footer>
-  <div class="footer-section">
-    <h3>Feedback</h3>
-    <p>
+        <div class="accordion home-guide-topics">
+          <details class="accordion-item">
+            <summary>Waar moet een stageplek aan voldoen?</summary>
+            <div class="accordion-content">
+              <ul>
+                <li>20 weken fulltime, start in september of februari</li>
+                <li>Technische inhoud: R&amp;D, metingen, modellering of systeemintegratie</li>
+                <li>Begeleiding vanuit bedrijf, instituut of onderzoeksgroep</li>
+                <li>Relevantie voor Technische Natuurkunde</li>
+                <li>Ruimte voor inhoudelijke en professionele groei</li>
+              </ul>
+            </div>
+          </details>
+          <details class="accordion-item">
+            <summary>Hoe vind je een stage?</summary>
+            <div class="accordion-content">
+              <ul>
+                <li>Gebruik de info-, kaart-, lijst- en opdrachtenpagina</li>
+                <li>Bekijk bedrijven, onderzoeksinstituten en beschikbare opdrachten</li>
+                <li>Neem contact op via e-mail of website</li>
+                <li>Bespreek ideeën met je SLB-docent</li>
+                <li>Laat een mogelijke opdracht inhoudelijk controleren door de stagecoördinator</li>
+              </ul>
+            </div>
+          </details>
+          <details class="accordion-item">
+            <summary>Tips</summary>
+            <div class="accordion-content">
+              <ul>
+                <li>Begin 2–3 maanden vooraf</li>
+                <li>Wees proactief in contact opnemen</li>
+                <li>Denk na over je technische interesses</li>
+                <li>Gebruik je netwerk</li>
+                <li>Bekijk regelmatig de pagina met openstaande opdrachten</li>
+                <li>Loop je vast? Neem contact op met je SLB-docent</li>
+              </ul>
+            </div>
+          </details>
+          <details class="accordion-item">
+            <summary>Stappenplan</summary>
+            <div class="accordion-content">
+              <ul>
+                <li>Ben je van plan om komend semester stage te lopen? Informeer dan zo vroeg mogelijk je SLB-docent, ook als je plannen nog niet definitief zijn.</li>
+                <li>Zoek één of meerdere interessante stagebedrijven. Kom je hier niet uit? Bespreek dit dan met je SLB-docent.</li>
+                <li>Stuur je cv en motivatie naar de bedrijven van je keuze. Twijfel je over de inhoud? Vraag dan feedback aan je SLB-docent.</li>
+                <li>Heb je een positief gesprek gehad en een geschikte stageopdracht gevonden? Zorg ervoor dat de opdracht schriftelijk is vastgelegd en stuur deze naar <a href="mailto:j.busink@hva.nl">j.busink@hva.nl</a>.</li>
+                <li>Stuur vervolgens een e-mail naar zowel de opdrachtgever als <a href="mailto:j.busink@hva.nl">j.busink@hva.nl</a>, waarin je aangeeft dat je de stage wilt gaan uitvoeren.</li>
+                <li>Vanaf dit moment neemt de stagecoördinator het contact met de opdrachtgever over en verzorgt de afstemming over de haalbaarheid, de stageovereenkomst en overige administratieve zaken.</li>
+              </ul>
+            </div>
+          </details>
+        </div>
+      </section>
+      <section id="opdrachtAanbiedenBalk" class="home-submit" hidden aria-labelledby="aanbiedenTitel">
+        <h2 id="aanbiedenTitel">Heb je een leuke opdracht voor onze studenten?</h2>
+        <a class="submission-invite-button" href="opdracht-aanbieden.html">Opdracht aanbieden</a>
+      </section>
+    </main>
+    <footer class="home-footer">
+      <div class="footer-section">
+        <h3>Feedback</h3>
+        <p>
       Mis je een bedrijf of opdracht, of klopt er iets niet?
       <a href="mailto:j.busink@hva.nl">Neem contact op</a>.
     </p>
-  </div>
-</footer>
-
-<script src="js/theme.js"></script>
-
-<script>
-  const menuToggle = document.getElementById("menuToggle");
-  const menuClose = document.getElementById("menuClose");
-  const sideMenu = document.getElementById("sideMenu");
-  const menuOverlay = document.getElementById("menuOverlay");
-
-  function openMenu() {
-    sideMenu.classList.add("open");
-    menuOverlay.classList.add("open");
-  }
-
-  function closeMenu() {
-    sideMenu.classList.remove("open");
-    menuOverlay.classList.remove("open");
-  }
-
-  menuToggle.addEventListener("click", openMenu);
-  menuClose.addEventListener("click", closeMenu);
-  menuOverlay.addEventListener("click", closeMenu);
-
-  fetch("data/opdrachten.json")
-    .then(r => r.json())
-    .then(opdrachten => {
-      const heeftOpenOpdrachten = opdrachten.some(opdracht =>
-        opdracht.status?.toLowerCase() === "open"
-      );
-
-      const opdrachtenKnop = document.querySelector(
-        '.side-menu-links a[href="opdrachten.html"]'
-      );
-
-      if (opdrachtenKnop && !heeftOpenOpdrachten) {
-        opdrachtenKnop.remove();
-      }
-    })
-    .catch(error => {
-      console.error("Opdrachten konden niet worden geladen:", error);
-    });
-</script>
-</body>
+      </div>
+      <div class="footer-section footer-management">
+        <h3>Beheer</h3>
+        <p>
+          <a href="opdrachten-beheer.html">Opdrachten beheren</a>
+        </p>
+        <p>
+          <a href="wachtwoorden-beheer.html">Wachtwoorden wijzigen</a>
+        </p>
+      </div>
+    </footer>
+    <script src="js/theme.js"></script>
+    <script src="js/site-instellingen.js"></script>
+    <script src="js/site-interface.js"></script>
+    <script src="js/home.js"></script>
+  </body>
 </html>

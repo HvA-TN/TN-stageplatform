@@ -172,6 +172,11 @@ function toonBedrijfInPanel(bedrijf) {
     ? `<a href="mailto:${escapeHtml(bedrijf.email)}">📧 E-mail</a>`
     : '';
 
+  const docenten = [...new Set(asArray(bedrijf.docenten).map(naam => String(naam).trim()).filter(Boolean))];
+  const docentenHtml = docenten.length
+    ? `<div class="company-teachers"><span class="company-teachers-label">${docenten.length === 1 ? 'Betrokken docent' : 'Betrokken docenten'}</span><ul class="company-teachers-list">${docenten.map(naam => `<li>${escapeHtml(naam)}</li>`).join('')}</ul></div>`
+    : '';
+
   let websiteHtml = '';
 
   if (Array.isArray(bedrijf.websites) && bedrijf.websites.length > 0) {
@@ -232,6 +237,7 @@ function toonBedrijfInPanel(bedrijf) {
     <div class="company-section">
       <div class="company-section-inner">
         <h3>Links en contact</h3>
+        ${docentenHtml}
         <div class="company-links">
           ${emailHtml}
           ${websiteHtml}
@@ -672,18 +678,7 @@ document.body.classList.toggle('light-mode', opgeslagenThema !== 'dark');
 
 updateKaart();
 
-if (darkToggle) {
-  darkToggle.addEventListener('click', () => {
-    const wordtDonker = !document.body.classList.contains('dark-mode');
-
-    document.body.classList.toggle('dark-mode', wordtDonker);
-    document.body.classList.toggle('light-mode', !wordtDonker);
-
-    localStorage.setItem('theme', wordtDonker ? 'dark' : 'light');
-
-    updateKaart();
-  });
-}
+document.addEventListener('themechange', () => updateKaart());
 
 /* =========================
    Favorieten

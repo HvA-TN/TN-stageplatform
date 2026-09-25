@@ -1,41 +1,61 @@
 <!DOCTYPE html>
 <html lang="nl">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Opdrachten - Technische Natuurkunde</title>
-  <link rel="stylesheet" href="css/style.css">
-</head>
-
-<body>
-
-<header class="subpage-header">
-  <a href="index.html" class="back-link">
-    <img src="images/icons/left_arrow.svg"
-         class="back-icon"
-         alt=""
-         width="26"
-         height="26">
-    <span>Opdrachten</span>
-  </a>
-</header>
-
-<main class="info-page">
-  <section id="opdrachtenContainer" class="assignment-list"></section>
-</main>
-
-<footer>
-  <div class="footer-section">
-    <h3>Feedback</h3>
-    <p>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opdrachten - Technische Natuurkunde</title>
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
+    <header class="subpage-header">
+      <a href="index.html" class="back-link">
+        <img src="images/icons/left_arrow.svg" class="back-icon" alt="" width="26" height="26">
+        <span>Opdrachten</span>
+      </a>
+      <button id="uitloggen" class="search-reset-button" type="button">Uitloggen</button>
+      <button id="darkToggle" class="dark-toggle" type="button" aria-label="Wissel thema">
+        <img id="themeIcon" src="images/icons/darkmode.svg" alt="" width="30" height="30">
+      </button>
+    </header>
+    <main class="info-page">
+      <section class="info-card search-card" aria-labelledby="opdrachtenTitel">
+        <div class="search-header">
+          <h1 id="opdrachtenTitel">Vind jouw stage- of afstudeeropdracht</h1>
+          <p>Vergelijk de opdrachten en klap een kaart open voor de volledige beschrijving.</p>
+        </div>
+        <form id="opdrachtFilters" class="assignment-filters" role="search">
+          <label>Zoeken
+        <input id="zoekInput" class="search-input" type="search" placeholder="Onderwerp, bedrijf of plaats" autocomplete="off">
+      </label>
+          <label>Type
+        <select id="typeFilter" class="search-select"><option value="">Alle types</option></select>
+      </label>
+          <label>Domein
+        <select id="domeinFilter" class="search-select"><option value="">Alle domeinen</option></select>
+      </label>
+          <button class="search-reset-button" type="reset">Wis filters</button>
+        </form>
+        <div id="actieveFilters" class="assignment-active-filters" aria-label="Actieve filters" hidden></div>
+      </section>
+      <p id="zoekStatus" class="search-status" role="status">Opdrachten laden…</p>
+      <section id="opdrachtenContainer" class="assignment-list"></section>
+      <noscript>
+        <p>Schakel JavaScript in om de opdrachten te bekijken en te filteren.</p>
+      </noscript>
+    </main>
+    <footer>
+      <div class="footer-section">
+        <h3>Feedback</h3>
+        <p>
       Mis je een opdracht of klopt er iets niet?
       Laat het weten via <a href="mailto:j.busink@hva.nl">Neem contact op</a>.
     </p>
-  </div>
-</footer>
-
-<script src="js/theme.js"></script>
-<script src="js/opdrachten.js"></script>
-
-</body>
+      </div>
+    </footer>
+    <script src="js/theme.js"></script>
+    <script src="js/site-instellingen.js"></script>
+    <script src="js/opdracht-toegang.js"></script>
+    <script src="js/opdracht-crypto.js"></script>
+    <script src="js/opdrachten.js"></script>
+  </body>
 </html>

@@ -1,106 +1,69 @@
 <!DOCTYPE html>
 <html lang="nl">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Stagebedrijven - Technische Natuurkunde</title>
-
-  <link rel="stylesheet" href="css/style.css">
-</head>
-
-<body>
-
-<header class="subpage-header">
-
-  <a href="index.html" class="back-link">
-    <img src="images/icons/left_arrow.svg"
-         class="back-icon"
-         alt=""
-         width="26"
-         height="26">
-
-    <span>Lijst</span>
-  </a>
-
-</header>
-
-<main class="info-page">
-
-  <section class="info-card search-card">
-
-    <div class="search-header">
-      <h2>Zoeken</h2>
-      <p>Zoek op naam, plaats, provincie, type, domein of beschrijving.</p>
-    </div>
-
-    <div class="search-row">
-
-      <input
-        type="text"
-        id="zoekInput"
-        class="search-input"
-        placeholder="Bijvoorbeeld: Amsterdam, fotonica, energie..."
-        autocomplete="off"
-      >
-
-      <select id="provincieFilter" class="search-select">
-        <option value="">Alle regios</option>
-      </select>
-
-      <button id="resetZoekopdracht"
-              class="search-reset-button"
-              type="button">
-        Wissen
-      </button>
-
-    </div>
-
-  </section>
-
-  <section id="zoekStatus"
-           class="search-status"
-           aria-live="polite"></section>
-
-  <section id="domeinLijst"
-           class="accordion"></section>
-
-</main>
-
-  <!-- <section class="info-card">
-
-    <h2>Openstaande opdrachten</h2>
-
-    <p>
-      Op zoek naar een concrete stage- of afstudeeropdracht?
-      Bekijk dan de opdrachtenpagina.
-    </p>
-
-    <div class="company-list-links">
-      <a href="opdrachten.html">
-        Bekijk openstaande opdrachten
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stagebedrijven - Technische Natuurkunde</title>
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
+    <header class="subpage-header">
+      <a href="index.html" class="back-link">
+        <img src="images/icons/left_arrow.svg" class="back-icon" alt="" width="26" height="26">
+        <span>Lijst</span>
       </a>
-    </div>
-
-  </section> -->
-
-<footer>
-
-  <div class="footer-section">
-    <h3>Feedback</h3>
-
-    <p>
+      <button id="darkToggle" class="dark-toggle" type="button" aria-label="Wissel thema">
+        <img id="themeIcon" src="images/icons/darkmode.svg" alt="" width="30" height="30">
+      </button>
+    </header>
+    <main class="info-page company-overview">
+      <section class="info-card search-card">
+        <div class="search-header">
+          <h1>Bedrijven en onderzoeksinstituten</h1>
+          <p>Alle organisaties staan hieronder op alfabetische volgorde. Zoek of combineer filters om de lijst te verkleinen.</p>
+        </div>
+        <label for="zoekInput">Zoeken</label>
+        <input type="search" id="zoekInput" class="search-input" placeholder="Naam, plaats, onderwerp, etc." autocomplete="off">
+        <div class="hero-filters-inner">
+          <div class="filter-group filter-group-type">
+            <label for="typeFilter">Type organisatie</label>
+            <select id="typeFilter">
+              <option value="">Alle types</option>
+            </select>
+          </div>
+          <div class="filter-group filter-group-provincie">
+            <label for="provincieFilter">Regio</label>
+            <select id="provincieFilter">
+              <option value="">Alle provincies</option>
+            </select>
+          </div>
+          <div class="filter-group filter-group-tags">
+            <span id="domeinLabel">Domein</span>
+            <div class="tag-filter-row">
+              <div class="filter-actions-column">
+                <button id="resetZoekopdracht" class="tag-filter-option" type="button">Wis filters</button>
+              </div>
+              <div id="tagFilter" class="tag-filter-list" role="group" aria-labelledby="domeinLabel"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="zoekStatus"
+           class="search-status"
+           role="status" aria-live="polite">Bedrijven laden...</section>
+      <section id="bedrijvenLijst" class="company-list" aria-label="Organisaties"></section>
+    </main>
+    <footer>
+      <div class="footer-section">
+        <h3>Feedback</h3>
+        <p>
       Mis je een bedrijf of opdracht, of klopt er iets niet?
       Laat het weten via
       <a href="mailto:j.busink@hva.nl">Neem contact op</a>.
     </p>
-  </div>
-
-</footer>
-
-<script src="js/theme.js"></script>
-<script src="js/lijst.js"></script>
-
-</body>
-
+      </div>
+    </footer>
+    <script src="js/theme.js"></script>
+    <script src="js/lijst.js"></script>
+  </body>
 </html>

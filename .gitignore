@@ -1,0 +1,36 @@
+# Local source data and exports
+*.xlsx
+*.xls
+*.xlsm
+*.csv
+~$*
+data/backups/
+data/*-test.json
+data/*_backup.json
+
+# Local tools and documentation
+*.py
+*.pyc
+__pycache__/
+*.md
+!/README.md
+.venv/
+.env
+.env.*
+.codex/
+.agents/
+
+# Retired pages and unused source assets (kept locally)
+/Technische_stages2026-2027.html
+/js/data-dashboard.js
+
+# Editor and OS files
+.DS_Store
+Thumbs.db
+*.tmp
+
+# Cloudflare local credentials and tooling cache
+.dev.vars
+.dev.vars.*
+.wrangler/
+node_modules/

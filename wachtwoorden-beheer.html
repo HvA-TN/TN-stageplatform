@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wachtwoorden wijzigen</title>
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
+    <header class="subpage-header">
+      <a href="index.html" class="back-link">
+        <img src="images/icons/left_arrow.svg" class="back-icon" alt="" width="26" height="26">
+        <span>Home</span>
+      </a>
+      <button id="beheerSluiten" class="search-reset-button admin-logout" type="button" hidden>Uitloggen</button>
+      <button id="darkToggle" class="dark-toggle" type="button" aria-label="Wissel thema">
+        <img id="themeIcon" src="images/icons/darkmode.svg" alt="" width="30" height="30">
+      </button>
+    </header>
+    <main class="info-page submission-page">
+      <section class="info-card">
+        <h1>Wachtwoorden wijzigen</h1>
+        <p>Stel een nieuw wachtwoord in voor gasten of beheerders.</p>
+        <form id="beheerOpen" class="access-form">
+          <p>Log in met je adminaccount om wachtwoorden te wijzigen.</p>
+          <label for="beheerNaam">Adminnaam</label>
+          <input id="beheerNaam" name="admin_username" class="search-input" autocomplete="section-admin username" required>
+          <label for="beheerSleutel">Adminaccount — adminwachtwoord</label>
+          <div class="password-input-row">
+            <input id="beheerSleutel" name="admin_password" class="search-input" type="password" autocomplete="section-admin current-password" required>
+            <button class="search-reset-button" type="button" data-password-toggle="beheerSleutel" aria-controls="beheerSleutel" aria-pressed="false">Tonen</button>
+          </div>
+          <button class="search-reset-button" type="submit">Inloggen als admin</button>
+        </form>
+        <form id="beheerOpslaan" class="access-form" hidden>
+          <h2>Accounts en toegang</h2>
+          <p>Kies een account en vul het nieuwe wachtwoord tweemaal in. Met Tonen controleer je wat je typt.</p>
+          <div class="account-actions">
+            <section class="account-action">
+              <h3>Gastaccount</h3>
+              <p>Kan opdrachten bekijken met het gedeelde wachtwoord.</p>
+              <button id="wijzigGast" class="search-reset-button" type="button" aria-expanded="false" aria-controls="gastSleutelVelden">Gastwachtwoord aanpassen</button>
+              <fieldset id="gastSleutelVelden" class="access-form" hidden disabled>
+                <legend>Nieuw wachtwoord voor gasten</legend>
+                <label for="beheerNieuweSleutel">Nieuw gedeeld wachtwoord (minimaal 8 tekens en 1 hoofdletter)</label>
+                <div class="password-input-row">
+                  <input id="beheerNieuweSleutel" class="search-input" type="password" autocomplete="new-password" minlength="8" pattern="(?=.*[A-Z]).{8,}" title="Minimaal 8 tekens en 1 hoofdletter (A-Z)" required>
+                  <button class="search-reset-button" type="button" data-password-toggle="beheerNieuweSleutel" aria-controls="beheerNieuweSleutel" aria-pressed="false">Tonen</button>
+                </div>
+                <label for="gastSleutelHerhaal">Herhaal het gedeelde wachtwoord</label>
+                <div class="password-input-row">
+                  <input id="gastSleutelHerhaal" aria-describedby="gastWachtwoordFout" class="search-input" type="password" autocomplete="new-password" required>
+                  <button class="search-reset-button" type="button" data-password-toggle="gastSleutelHerhaal" aria-controls="gastSleutelHerhaal" aria-pressed="false">Tonen</button>
+                </div>
+                <p id="gastWachtwoordFout" class="password-error" role="status" hidden></p>
+              </fieldset>
+            </section>
+            <section class="account-action">
+              <h3>Adminaccount</h3>
+              <p>Kan opdrachten en wachtwoorden beheren. Publiceren vereist daarnaast GitHub-schrijfrechten.</p>
+              <button id="wijzigAdmin" class="search-reset-button" type="button" aria-expanded="false" aria-controls="adminSleutelVelden">Adminwachtwoord aanpassen</button>
+              <fieldset id="adminSleutelVelden" class="access-form" hidden disabled>
+                <legend>Nieuw wachtwoord voor admin</legend>
+                <label for="beheerNieuweMaster">Nieuw adminwachtwoord (minimaal 8 tekens en 1 hoofdletter)</label>
+                <div class="password-input-row">
+                  <input id="beheerNieuweMaster" class="search-input" type="password" autocomplete="new-password" minlength="8" pattern="(?=.*[A-Z]).{8,}" title="Minimaal 8 tekens en 1 hoofdletter (A-Z)" required>
+                  <button class="search-reset-button" type="button" data-password-toggle="beheerNieuweMaster" aria-controls="beheerNieuweMaster" aria-pressed="false">Tonen</button>
+                </div>
+                <label for="adminSleutelHerhaal">Herhaal het adminwachtwoord</label>
+                <div class="password-input-row">
+                  <input id="adminSleutelHerhaal" aria-describedby="adminWachtwoordFout" class="search-input" type="password" autocomplete="new-password" required>
+                  <button class="search-reset-button" type="button" data-password-toggle="adminSleutelHerhaal" aria-controls="adminSleutelHerhaal" aria-pressed="false">Tonen</button>
+                </div>
+                <p id="adminWachtwoordFout" class="password-error" role="status" hidden></p>
+              </fieldset>
+            </section>
+          </div>
+          <p>Bevestig je wijziging. Daarna zie je de stappen om het nieuwe wachtwoord online te activeren. Tot die tijd blijft het oude wachtwoord werken.</p>
+          <button id="beheerOpslaanKnop" class="search-reset-button" type="submit">Wachtwoordwijziging bevestigen</button>
+        </form>
+        <p id="beheerStatus" role="status"></p>
+        <section id="beheerBevestiging" class="info-card" hidden aria-labelledby="opgeslagenTitel">
+          <h2 id="opgeslagenTitel">Nog één stap: online activeren</h2>
+          <p id="beheerResultaat"></p>
+          <p><strong>Het nieuwe wachtwoord is nog niet actief.</strong> De download bevat alleen de versleutelde toegangsinstellingen. Je opdrachten blijven ongewijzigd en zijn met het nieuwe wachtwoord toegankelijk.</p>
+          <ol>
+            <li>Zoek het zojuist gedownloade bestand in je downloadmap. De browser kan het bijvoorbeeld <code>toegang (1).json</code> noemen.</li>
+            <li>Vervang <code>data/toegang.json</code> in je project door deze download. De bestandsnaam moet <code>toegang.json</code> zijn.</li>
+            <li>Publiceer de wijziging via GitHub (commit en push) en wacht tot de website is bijgewerkt.</li>
+            <li>Controleer na publicatie of je kunt inloggen met het nieuwe wachtwoord.</li>
+          </ol>
+        </section>
+      </section>
+    </main>
+    <script src="js/theme.js"></script>
+    <script src="js/wachtwoord-tonen.js"></script>
+    <script src="js/site-instellingen.js"></script>
+    <script src="js/opdracht-toegang.js"></script>
+    <script src="js/opdracht-crypto.js"></script>
+    <script src="js/wachtwoorden-beheer.js"></script>
+  </body>
+</html>

@@ -18,6 +18,10 @@
     document.body.classList.toggle('light-mode', !isDark);
 
     updateThemeIcon(theme);
+    if (darkToggle) {
+      darkToggle.setAttribute('aria-label', isDark ? 'Schakel naar licht thema' : 'Schakel naar donker thema');
+      darkToggle.setAttribute('title', isDark ? 'Licht thema' : 'Donker thema');
+    }
   }
 
   function huidigThema() {

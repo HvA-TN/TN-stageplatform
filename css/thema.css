@@ -1,0 +1,265 @@
+/* =========================
+   18. GIREP / HEPCON DARK MODE
+   ========================= */
+
+body.dark-mode {
+  --bg-page: #121212;
+  --bg-panel: #1e1e1e;
+  --bg-soft: #252525;
+  --bg-soft-2: #2e2e2e;
+  --bg-link: #899cd2;
+  --bg-link-hover: #899cd2;
+
+  --text-main: #eaeaea;
+  --text-soft: #a1a1a1;
+  --text-muted: #777777;
+  --text-heading: #ffffff;
+
+  --border: #3a3a3a;
+  --border-soft: #2e2e2e;
+
+  --accent: #899cd2;
+  --accent-hover: #899cd2;
+
+  --shadow-soft: none;
+}
+
+/* panelen in dark mode */
+body.dark-mode .info-card,
+body.dark-mode .sidepanel,
+body.dark-mode .accordion-item,
+body.dark-mode .hero-filters-inner,
+body.dark-mode .company-list-item,
+body.dark-mode .assignment-card,
+body.dark-mode .favorieten-lijst,
+body.dark-mode .subpage-header,
+body.dark-mode .homebar,
+body.dark-mode .side-menu {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  box-shadow: none;
+}
+
+/* headers */
+body.dark-mode .homebar,
+body.dark-mode .subpage-header {
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  border-radius: 0;
+}
+
+/* typografie */
+body.dark-mode .homebar-left h1,
+body.dark-mode .back-link,
+body.dark-mode .side-menu h2,
+body.dark-mode .info-card h2,
+body.dark-mode .accordion-item summary,
+body.dark-mode .company-list-item h3,
+body.dark-mode .assignment-card h3 {
+  color: var(--text-heading);
+}
+
+/* knoppen en links */
+body.dark-mode .company-links a,
+body.dark-mode .company-list-links a,
+body.dark-mode .home-menu a,
+body.dark-mode .side-menu-links a,
+body.dark-mode .search-reset-button,
+body.dark-mode .favoriet-knop,
+body.dark-mode .tag-filter-option {
+  background: var(--bg-soft);
+  color: var(--text-main);
+  border: 1px solid var(--border);
+}
+
+body.dark-mode .company-links a:hover,
+body.dark-mode .company-list-links a:hover,
+body.dark-mode .home-menu a:hover,
+body.dark-mode .side-menu-links a:hover,
+body.dark-mode .search-reset-button:hover,
+body.dark-mode .favoriet-knop:hover,
+body.dark-mode .tag-filter-option:hover {
+  background: var(--bg-link-hover);
+  color: #ffffff;
+}
+
+/* actieve menu-link */
+body.dark-mode .side-menu-links a.active {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+body.dark-mode .side-menu-links a.active img {
+  filter: brightness(0) invert(1);
+}
+
+/* inputs/selects */
+body.dark-mode .search-input,
+body.dark-mode .search-select,
+body.dark-mode .filter-group select {
+  background: var(--bg-panel);
+  color: var(--text-main);
+  border: 1px solid var(--border);
+}
+
+body.dark-mode .search-input::placeholder {
+  color: var(--text-muted);
+}
+
+body.dark-mode .search-input:focus,
+body.dark-mode .search-select:focus,
+body.dark-mode .filter-group select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(111, 139, 214, 0.22);
+}
+
+/* accordion */
+body.dark-mode .accordion-content {
+  background: var(--bg-soft);
+}
+
+body.dark-mode .accordion-item summary::after {
+  color: var(--accent);
+}
+
+/* opdrachten */
+body.dark-mode .assignment-meta-item {
+  background: var(--bg-soft);
+  border: 1px solid var(--border-soft);
+}
+
+body.dark-mode .assignment-keyword {
+  background: var(--bg-link);
+  border: 1px solid var(--border);
+  color: #ffffff;
+}
+
+body.dark-mode .assignment-status {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+/* hamburger */
+body.dark-mode .menu-toggle {
+  background: transparent;
+  border: none;
+}
+
+body.dark-mode .menu-toggle span {
+  background: var(--accent);
+}
+
+/* dark mode knop */
+body.dark-mode .dark-toggle {
+  background: transparent;
+  border: none;
+}
+
+body.dark-mode .dark-toggle:hover {
+  background: var(--bg-soft);
+}
+
+/* sidebar overlay */
+body.dark-mode .menu-overlay {
+  background: rgba(0, 0, 0, 0.55);
+}
+
+body.dark-mode .menu-close {
+  background: var(--bg-soft);
+  color: var(--text-heading);
+  border: 1px solid var(--border);
+}
+
+/* footer */
+body.dark-mode footer,
+body.dark-mode .footer {
+  background: var(--bg-panel);
+  border-top: 1px solid var(--border);
+}
+
+/* kaart clusters */
+body.dark-mode .marker-cluster-small div,
+body.dark-mode .marker-cluster-medium div,
+body.dark-mode .marker-cluster-large div {
+  background-color: var(--accent);
+  color: #ffffff;
+}
+
+/* =========================
+   DARK MODE KAART
+   ========================= */
+
+body.dark-mode .leaflet-tile-pane {
+  filter:
+    brightness(0.412)
+    contrast(1.4)
+    saturate(0.05);
+}
+
+/* =========================
+   MARKERS
+   ========================= */
+
+.custom-pin-wrapper {
+  background: transparent;
+  border: none;
+}
+
+.custom-pin {
+  position: relative;
+  width: 22px;
+  height: 22px;
+}
+
+/* Buitenste ring */
+.custom-pin::before {
+  content: "";
+  position: absolute;
+
+  inset: -1px;
+
+  border-radius: 50%;
+
+  background: rgba(64, 91, 120, 0.22);
+  border: 1px solid rgba(64, 91, 120, 0.30);
+}
+
+/* Binnenste marker */
+.custom-pin::after {
+  content: "";
+  position: absolute;
+
+  inset: 4px;
+
+  border-radius: 50%;
+
+  background: #ffffff;
+  border: 4px solid #405b78;
+
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(255, 255, 255, 0.8);
+}
+
+/* Dark mode */
+body.dark-mode .custom-pin::before {
+  background: rgba(158, 182, 207, 0.28);
+  border-color: rgba(158, 182, 207, 0.40);
+}
+
+body.dark-mode .custom-pin::after {
+  background: #172033;
+  border-color: #a9bfd6;
+
+  box-shadow:
+    0 1px 4px rgba(0, 0, 0, 0.65),
+    0 0 0 1px rgba(255, 255, 255, 0.20);
+}
+
+.custom-pin {
+  position: relative;
+  width: 22px;
+  height: 22px;
+  transition: transform 0.15s ease;
+}

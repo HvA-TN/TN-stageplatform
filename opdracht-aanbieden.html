@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opdracht aanbieden - Technische Natuurkunde</title>
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
+    <header class="subpage-header">
+      <a href="index.html" class="back-link">
+        <img src="images/icons/left_arrow.svg" class="back-icon" alt="" width="26" height="26">
+        <span>Home</span>
+      </a>
+      <div class="submission-language" role="group" aria-label="Taal / Language">
+        <button type="button" data-form-language="nl" lang="nl" aria-label="Nederlands" aria-pressed="true">NL</button>
+        <button type="button" data-form-language="en" lang="en" aria-label="English" aria-pressed="false">EN</button>
+      </div>
+      <button id="darkToggle" class="dark-toggle" type="button" aria-label="Wissel thema">
+        <img id="themeIcon" src="images/icons/darkmode.svg" alt="" width="30" height="30">
+      </button>
+    </header>
+    <main class="info-page submission-page">
+      <section id="opdrachtIndienen" class="info-card" hidden aria-labelledby="inzendingTitel">
+        <h1 id="inzendingTitel" data-en="Submit an internship assignment">Een stageopdracht indienen</h1>
+        <h2 data-en="Project requirements">Criteria voor de opdracht</h2>
+        <ul>
+          <li data-en="An internship or graduation project lasts 5-6 months.">Een stage of afstudeeropdracht duurt 5-6 maanden (half studiejaar).</li>
+          <li data-en="The project must involve physics and be relevant to Applied Physics.">De opdracht heeft een natuurkundige inhoud en sluit aan bij Technische Natuurkunde.</li>
+          <li data-en="The organisation must provide subject-specific supervision.">Er is inhoudelijke begeleiding beschikbaar vanuit de organisatie.</li>
+        </ul>
+        <p data-en="Submit an internship/graduation assignment for Applied Physics students. The internship coordinator reviews your proposal and will contact you before publication.">Bied een stage- of afstudeeropdracht aan voor Technische Natuurkunde. De stagecoördinator beoordeelt je voorstel en neemt contact op voordat het op de website komt.</p>
+        <form id="opdrachtFormulier" class="submission-form" action="https://api.web3forms.com/submit" method="POST">
+          <input type="hidden" name="access_key" value="552b8fe6-63af-4bb6-a7c1-31ec8dae7a45">
+          <input type="hidden" name="subject" value="Nieuwe opdracht aangeboden via TN-stageplatform">
+          <input type="hidden" name="from_name" value="TN-stageplatform">
+          <input type="checkbox" name="botcheck" hidden tabindex="-1" aria-hidden="true">
+          <p class="submission-wide" data-en="Fields marked optional can be left blank.">Velden met ‘optioneel’ hoef je niet in te vullen.</p>
+          <fieldset class="submission-section">
+            <legend data-en="1. Contact details and organisation">1. Contactgegevens en organisatie</legend>
+            <div class="submission-fields">
+              <label>
+                <span data-en="Organisation">Organisatie</span>
+                <input name="organisatie" autocomplete="organization" maxlength="200" required>
+              </label>
+              <label>
+                <span data-en="Contact person">Contactpersoon</span>
+                <input name="name" autocomplete="name" maxlength="150" required>
+              </label>
+              <label>
+                <span data-en="Email address">E-mailadres</span>
+                <input name="email" type="email" autocomplete="email" maxlength="254" required>
+              </label>
+              <label>
+                <span data-en="Phone number (optional)">Telefoonnummer (optioneel)</span>
+                <input name="telefoon" type="tel" autocomplete="tel" maxlength="50">
+              </label>
+              <fieldset class="submission-wide contact-sharing">
+                <legend data-en="Contact with students">Contact met studenten</legend>
+                <p id="deelContactUitleg" data-en="By default, the lecturer first selects students. Only those students receive your contact details. Prefer direct contact? Turn on the switch below to share the project and your contact details with students without lecturer preselection.">Standaard voorselecteert de docent eerst studenten. Alleen deze studenten ontvangen daarna je contactgegevens. Liever rechtstreeks contact? Zet de schakelaar hieronder aan om de opdracht en je contactgegevens zonder voorselectie met studenten te delen.</p>
+                <label class="contact-sharing-toggle">
+                  <input id="rechtstreeksDelen" type="checkbox" role="switch" name="rechtstreeks_delen" aria-describedby="deelContactUitleg">
+                  <span class="contact-switch-track" aria-hidden="true"></span>
+                  <span data-en="Share directly, without preselection">Rechtstreeks delen, zonder voorselectie</span>
+                </label>
+              </fieldset>
+            </div>
+          </fieldset>
+          <fieldset class="submission-section">
+            <legend data-en="2. Project details">2. Gegevens van de opdracht</legend>
+            <div class="submission-fields">
+              <label class="submission-wide">
+                <span data-en="Project title">Titel van de opdracht</span>
+                <input name="titel" maxlength="200" required>
+              </label>
+              <label>
+                <span data-en="Project location">Locatie van de opdracht</span>
+                <input name="locatie" maxlength="200" required>
+              </label>
+              <label>
+                <span data-en="Project type">Type opdracht</span>
+                <select name="type" required>
+                  <option value="" data-en="Select a type">Kies een type</option>
+                  <option value="Stage" data-en="Internship">Stage</option>
+                  <option value="Afstuderen" data-en="Graduation project">Afstuderen</option>
+                  <option value="Stage/Afstuderen" data-en="Internship / graduation project">Stage/Afstuderen</option>
+                </select>
+              </label>
+              <label class="submission-wide">
+                <span data-en="Start period (optional)">Startperiode (optioneel)</span>
+                <input name="periode" placeholder="" data-en-placeholder="" maxlength="150">
+              </label>
+              <label class="submission-wide">
+                <span data-en="Description">Beschrijving</span>
+                <textarea name="message" rows="7" maxlength="10000" placeholder="Beschrijf de context, het doel, de werkzaamheden en de beschikbare begeleiding." data-en-placeholder="Describe the context, objective, activities and available supervision." required></textarea>
+              </label>
+              <label class="submission-wide">
+                <span data-en="Link to a project document (optional)">Link naar een opdrachtdocument (optioneel)</span>
+                <input name="documentlink" type="url" placeholder="" maxlength="2000">
+              </label>
+            </div>
+          </fieldset>
+          <p class="submission-wide" data-en="Your details are sent to the internship coordinator and will not be published automatically.">Je gegevens worden naar de stagecoördinator verstuurd en worden niet automatisch gepubliceerd.</p>
+          <p id="privacyEmail" class="submission-wide" hidden data-en="When you submit, Web3Forms processes your project and contact details to email them to the internship coordinator.">Bij versturen verwerkt Web3Forms je opdracht en contactgegevens om deze per e-mail aan de stagecoördinator te bezorgen.</p>
+          <p id="privacyInbox" class="submission-wide" hidden data-en="Your project and contact details are stored in the coordinator's review inbox on Cloudflare. Cloudflare Turnstile checks for spam.">Je opdracht en contactgegevens worden opgeslagen in de beoordelingsinbox van de coördinator bij Cloudflare. Cloudflare Turnstile controleert op spam.</p>
+          <p class="submission-wide" data-en="Only include information needed to assess the project. For questions, corrections or a deletion request, contact j.busink@hva.nl.">Vul alleen gegevens in die nodig zijn om de opdracht te beoordelen. Voor vragen, correcties of een verwijderverzoek kun je contact opnemen via j.busink@hva.nl.</p>
+          <div id="inzendingSpamcontrole" class="submission-wide" hidden></div>
+          <button id="opdrachtVersturen" class="search-reset-button" type="submit" data-en="Submit project">Opdracht versturen</button>
+          <p id="inzendingStatus" class="submission-wide" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+      <section id="inzendingUitgeschakeld" class="info-card" hidden>
+        <h1 data-en="Submit an internship assignment">Opdracht indienen</h1>
+        <p data-en="The submission form is currently unavailable.">Het inzendformulier is momenteel niet beschikbaar.</p>
+        <a href="index.html" data-en="Back to Home">Terug naar Home</a>
+      </section>
+      <noscript>
+        <p>Schakel JavaScript in om het inzendformulier te gebruiken. / Enable JavaScript to use the submission form.</p>
+      </noscript>
+    </main>
+    <script src="js/theme.js"></script>
+    <script src="js/site-instellingen.js"></script>
+    <script src="js/site-interface.js"></script>
+    <script src="js/formulier-taal.js"></script>
+    <script src="js/opdracht-formaat.js"></script>
+    <script src="js/inzending-ontvangst.js"></script>
+    <script src="js/opdracht-indienen.js"></script>
+  </body>
+</html>
