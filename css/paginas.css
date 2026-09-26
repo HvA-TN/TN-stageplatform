@@ -686,11 +686,6 @@ body.dark-mode .info-card .password-error { color: #ffb4ab; }
   overflow-wrap: anywhere;
 }
 .assignment-admin-save span { color: var(--text-soft); font-size: .85rem; }
-.assignment-paste { border-top: 1px solid var(--border); padding-top: 14px; }
-.assignment-paste summary { cursor: pointer; font-weight: 600; color: var(--text-heading); }
-.assignment-paste label { display: block; margin: 16px 0 8px; font-size: .9rem; }
-.assignment-paste textarea { margin-bottom: 12px; }
-.assignment-paste p:empty { display: none; }
 .assignment-admin-page { width: 100%; max-width: 1500px; margin: 0 auto; }
 .assignment-admin-layout { grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); align-items: start; }
 .assignment-admin-layout .assignment-admin-save-all {
@@ -700,7 +695,7 @@ body.dark-mode .info-card .password-error { color: #ffb4ab; }
 .assignment-admin-layout #opdrachtIndex option { padding: 10px 8px; }
 .assignment-admin-layout .assignment-overview {
   align-self: stretch;
-  grid-template-rows: auto auto auto auto minmax(320px, 1fr) auto auto;
+  grid-template-rows: auto auto auto auto minmax(320px, 1fr) auto;
 }
 .assignment-overview #opdrachtIndex { height: 100%; }
 @media (max-width: 1000px) {
@@ -717,6 +712,14 @@ body.dark-mode .info-card .password-error { color: #ffb4ab; }
 .assignment-field { display: grid; align-content: start; gap: 6px; min-width: 0; }
 .assignment-field small { color: var(--text-soft); font-weight: normal; }
 .assignment-field-wide { grid-column: 1 / -1; }
+.keyword-entry { display: flex; align-items: center; gap: 8px; }
+.keyword-entry input { flex: 1; }
+.keyword-entry button { flex-shrink: 0; }
+.keyword-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.keyword-chips:empty { display: none; }
+.keyword-chip { display: inline-flex; align-items: center; gap: 8px; padding: 5px 10px; border: 1px solid var(--border); border-radius: 16px; background: var(--bg-panel); max-width: 100%; }
+.keyword-chip span { overflow-wrap: anywhere; min-width: 0; }
+.keyword-chip button { background: none; border: 0; color: var(--text-main); cursor: pointer; padding: 2px 4px; font-size: 1.2rem; }
 .assignment-domains { min-width: 0; margin: 0; padding: 0; border: 0; }
 .assignment-domain-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
 .assignment-domain-options label {
@@ -998,3 +1001,14 @@ body.dark-mode .home-shortcuts a:hover {
   width: 20px;
   height: 2px;
 }
+
+/* Keep incoming submissions separate from the published assignment editor. */
+.assignment-admin-page { grid-template-columns: minmax(0, 1fr); }
+#beoordelingen.inbox-section { margin-top: 32px; padding: 28px; }
+.inbox-documents { display: grid; gap: 10px; padding: 16px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-panel); }
+.inbox-documents h4 { margin: 0; }
+.inbox-document { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+.inbox-document span { overflow-wrap: anywhere; min-width: 0; flex: 1 1 200px; }
+.inbox-document button { flex-shrink: 0; }
+.inbox-review-actions { margin-top: 8px; padding-top: 18px; border-top: 1px solid var(--border); }
+@media (max-width: 600px) { #beoordelingen.inbox-section { padding: 16px; } }

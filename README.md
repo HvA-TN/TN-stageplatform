@@ -98,18 +98,16 @@ Bij een downloadprobleem kun je **Download opnieuw** gebruiken.
 
 De ID wordt automatisch toegekend en blijft vast. Kies **Open** om de opdracht
 zichtbaar te maken of **Gesloten** om deze verborgen te houden. Vink een of meer
-van de zes domeinen aan en vul trefwoorden per regel in. De onderliggende JSON
+van de zes domeinen aan en voeg maximaal zes trefwoorden toe met Enter of de knop Toevoegen. De onderliggende JSON
 wordt automatisch opgebouwd; je hoeft deze niet zelf te bewerken.
 
-### JSON uit een inzendmail
+### Inzendingen uit de inbox overnemen
 
-Klik naast **Nieuwe opdracht** op **Importeren uit e-mail**. Plak alleen de inhoud van
-`opdracht_json`, van `{` tot en met `}`, en klik op **Importeren**.
-Er is geen bestand of betaald formulierabonnement nodig voor deze werkwijze.
-Elke import maakt een nieuwe opdracht met een eigen volgnummer en status `closed`.
-Controleer de inhoud, vul docent/domeinen/trefwoorden aan en sla de lijst op.
-De mail-ID is voorlopig; bestaande opdrachten worden niet overschreven.
-Contactgegevens en toestemming voor het delen van e-mail staan apart in de mail.
+De inbox staat in een apart blok onder het opdrachtenbeheer. Documenten hebben
+een eigen downloadgedeelte. Klik op **Overnemen om te bewerken** om een inzending
+als gesloten opdracht in het formulier te openen. Controleer de inhoud, vul de
+docent, domeinen en trefwoorden aan en sla op. Markeer de inzending daarna als
+afgehandeld. De e-mailimport is verwijderd.
 
 ### Wachtwoorden wijzigen
 
@@ -267,7 +265,7 @@ Bewerk alleen `js/site-instellingen.js`, commit en push:
 | `opdrachtIndienen` | Gehele bedrijfsformulier en verwijzingen verbergen; de beheerinbox blijft bij actieve Cloudflare beschikbaar |
 
 Met beide koppelingen op `false` wordt het formulier automatisch verborgen.
-Met alleen e-mail actief blijft JSON plakken vanuit de mail mogelijk.
+Met alleen e-mail actief neem je opdrachten handmatig over via Nieuwe opdracht.
 Met alleen Cloudflare actief komen inzendingen in de inbox zonder e-mail.
 Instellingen, sleutels en URLs kunnen blijven staan zodat je later met `true`
 weer kunt inschakelen. Controleer de actuele waarden in `js/site-instellingen.js`.

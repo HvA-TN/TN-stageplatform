@@ -39,14 +39,7 @@
             <select id="opdrachtIndex" class="search-input" size="7"></select>
             <div class="opdracht-index-actions">
               <button id="opdrachtToevoegen" class="search-reset-button" type="button">Nieuwe opdracht</button>
-              <button id="opdrachtPlakToggle" class="search-reset-button" type="button" aria-expanded="false" aria-controls="opdrachtPlakkenPaneel">Importeren uit e-mail</button>
               <button id="opdrachtVerwijderen" class="search-reset-button" type="button">Verwijderen</button>
-            </div>
-            <div id="opdrachtPlakkenPaneel" class="assignment-paste" hidden>
-              <label for="opdrachtPlakJson">Kopieer de inhoud van opdracht_json, van { tot en met }.</label>
-              <textarea id="opdrachtPlakJson" rows="8" spellcheck="false" placeholder='{"titel": "..."}'></textarea>
-              <button id="opdrachtPlakImporteren" class="search-reset-button" type="button">Importeren</button>
-              <p id="opdrachtPlakStatus" role="status"></p>
             </div>
           </section>
           <section class="assignment-admin-block" aria-labelledby="opdrachtBewerkenTitel">
@@ -73,7 +66,15 @@
                 <label><input type="checkbox" name="opdrachtDomein" value="High-tech systemen &amp; materialen"><span>High-tech systemen &amp; materialen</span></label>
                 <label><input type="checkbox" name="opdrachtDomein" value="Veiligheid &amp; defensie"><span>Veiligheid &amp; defensie</span></label>
               </div></fieldset>
-              <label class="assignment-field assignment-field-wide">Trefwoorden<textarea id="veld-keywords" data-field="keywords" rows="3" aria-describedby="keywordsHint"></textarea><small id="keywordsHint">Eén trefwoord per regel.</small></label>
+              <div class="assignment-field assignment-field-wide">
+                <label for="veld-keywords">Trefwoorden</label>
+                <div id="trefwoordenLijst" class="keyword-chips" aria-label="Toegevoegde trefwoorden"></div>
+                <div class="keyword-entry">
+                  <input id="veld-keywords" class="search-input" type="text" placeholder="Voeg een trefwoord toe" aria-describedby="keywordsHint" autocomplete="off">
+                  <button id="trefwoordToevoegen" class="search-reset-button" type="button">Toevoegen</button>
+                </div>
+                <small id="keywordsHint" role="status">Maximaal 6 trefwoorden. Voeg toe met Enter of de knop.</small>
+              </div>
             </fieldset>
             <p id="opdrachtLeeg">Kies een opdracht of maak een nieuwe aan.</p>
           </section>
@@ -89,8 +90,9 @@
           <a id="beheerDownload" class="search-reset-button" download="opdrachten.json">Download opnieuw</a>
           <p>Een nieuwe sessie laadt de gepubliceerde versie. Publiceer dus eerst je wijzigingen.</p>
         </section>
-        <section id="beoordelingen" class="assignment-admin-block" hidden aria-labelledby="beoordelingenTitel">
-          <h2 id="beoordelingenTitel">Te beoordelen</h2>
+      </section>
+      <section id="beoordelingen" class="info-card inbox-section" hidden aria-labelledby="beoordelingenTitel">
+          <h2 id="beoordelingenTitel">Inbox</h2>
           <p>Nieuwe inzendingen staan hier privé. Overnemen is nog geen publicatie.</p>
           <div class="inbox-login">
             <label for="beoordelingenToken">Toegangscode inbox</label>
@@ -118,7 +120,6 @@
             </div>
           </div>
           <p id="beoordelingenStatus" role="status"></p>
-        </section>
       </section>
     </main>
     <script src="js/theme.js"></script>
@@ -127,7 +128,7 @@
     <script src="js/opdracht-toegang.js"></script>
     <script src="js/opdracht-crypto.js"></script>
     <script src="js/opdracht-formaat.js"></script>
-    <script src="js/beoordelingen.js?v=20260926"></script>
-    <script src="js/opdrachten-index.js?v=20260926-formulier"></script>
+    <script src="js/beoordelingen.js?v=20260926-inbox"></script>
+    <script src="js/opdrachten-index.js?v=20260926-inbox"></script>
   </body>
 </html>

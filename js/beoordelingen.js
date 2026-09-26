@@ -29,10 +29,7 @@
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` } });
     } catch (error) {
       if (error.name === 'AbortError') throw error;
-      const local = ['localhost', '127.0.0.1', ''].includes(window.location.hostname);
-      throw new Error(local
-        ? 'De inbox is niet toegankelijk vanaf dit lokale adres. Open opdrachtenbeheer op https://hva-tn.github.io/TN-stageplatform/opdrachten-beheer.html.'
-        : `Geen verbinding met de inbox. Controleer je internetverbinding en of Cloudflare SITE_ORIGIN exact ${window.location.origin} toestaat.`);
+      throw new Error('Geen verbinding met de inbox. Probeer het later opnieuw.');
     }
     if (download && response.ok) return response.blob();
     const value = await response.json();
@@ -65,12 +62,22 @@
         const contact = document.createElement('p');
         contact.textContent = `Contact: ${item.contact.naam} · ${item.contact.email}${item.contact.telefoon ? ' · ' + item.contact.telefoon : ''}. Voorkeur: ${item.contact.delen}.${item.contact.documentlink ? ' Document: ' + item.contact.documentlink : ''}`;
         const actions = document.createElement('div');
-        actions.className = 'opdracht-index-actions';
+        actions.className = 'opdracht-index-actions inbox-review-actions';
+        const documents = document.createElement('section');
+        documents.className = 'inbox-documents';
+        const documentsTitle = document.createElement('h4');
+        documentsTitle.textContent = 'Documenten';
+        documents.appendChild(documentsTitle);
         const files = item.contact.documents || (item.contact.document ? [item.contact.document] : []);
         files.forEach((file, index) => {
           const download = document.createElement('button');
           download.type = 'button'; download.className = 'search-reset-button';
-          download.textContent = `Download: ${file.name}`;
+          const fileRow = document.createElement('div');
+          fileRow.className = 'inbox-document';
+          const fileName = document.createElement('span');
+          fileName.textContent = file.name;
+          download.textContent = 'Download document';
+          download.setAttribute('aria-label', `Download ${file.name}`);
           download.addEventListener('click', async () => {
             download.disabled = true;
             const generation = session;
@@ -86,7 +93,8 @@
               if (generation === session && error.name !== 'AbortError') message.textContent = error.message;
             } finally { download.disabled = false; }
           });
-          actions.appendChild(download);
+          fileRow.append(fileName, download);
+          documents.appendChild(fileRow);
         });
         const transfer = document.createElement('button');
         transfer.disabled = Boolean(item.cleanup_started_at);
@@ -111,7 +119,10 @@
             await load();
           } catch (error) { message.textContent = error.message; archive.disabled = false; }
         });
-        actions.append(transfer, archive); card.append(title, details, description, contact, actions); list.appendChild(card);
+        actions.append(transfer, archive);
+        card.append(title, details, description, contact);
+        if (files.length) card.appendChild(documents);
+        card.appendChild(actions); list.appendChild(card);
       }
       el('beoordelingenVorige').disabled = page === 0;
       el('beoordelingenVolgende').disabled = !result.more;

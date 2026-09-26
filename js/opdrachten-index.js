@@ -4,12 +4,51 @@
   const index = el('opdrachtIndex'), search = el('opdrachtZoeken'), status = el('beheerStatus');
   const confirmation = el('beheerBevestiging'), logout = el('beheerSluiten');
   let downloadUrl, access, rows = [], selected = '', dirty = false, busy = false;
+  let keywords = [];
+  const keywordInput = el('veld-keywords');
 
   function changed() {
     dirty = true;
     confirmation.hidden = true;
     status.textContent = 'Je hebt wijzigingen die nog niet zijn opgeslagen.';
   }
+  function renderKeywords() {
+    const list = el('trefwoordenLijst');
+    list.replaceChildren();
+    keywords.forEach((word, position) => {
+      const chip = document.createElement('span');
+      chip.className = 'keyword-chip';
+      const label = document.createElement('span');
+      label.textContent = word;
+      const remove = document.createElement('button');
+      remove.type = 'button'; remove.textContent = '\u00d7';
+      remove.setAttribute('aria-label', `Verwijder trefwoord ${word}`);
+      remove.addEventListener('click', () => {
+        if (busy) return;
+        keywords.splice(position, 1); renderKeywords(); changed(); keywordInput.focus();
+      });
+      chip.append(label, remove); list.appendChild(chip);
+    });
+    el('keywordsHint').textContent = `${keywords.length} van maximaal 6 trefwoorden. Voeg toe met Enter of de knop.`;
+  }
+  function addKeyword() {
+    const word = keywordInput.value.trim();
+    if (!word) return;
+    if (keywords.some(value => value.toLocaleLowerCase() === word.toLocaleLowerCase())) {
+      keywordInput.value = ''; return;
+    }
+    if (keywords.length >= 6) throw new Error('Je kunt maximaal 6 trefwoorden toevoegen. Verwijder eerst een trefwoord.');
+    keywords.push(word); keywordInput.value = ''; renderKeywords(); changed();
+  }
+  function addKeywordFromInput() {
+    if (busy || !selected) return;
+    try { addKeyword(); } catch (error) { el('keywordsHint').textContent = error.message; }
+    keywordInput.focus();
+  }
+  el('trefwoordToevoegen').addEventListener('click', addKeywordFromInput);
+  keywordInput.addEventListener('keydown', event => {
+    if (event.key === 'Enter' && !event.isComposing) { event.preventDefault(); addKeywordFromInput(); }
+  });
   function allocateId() {
     const highest = Math.max(0, ...rows.map(row => Number(/^OpdrachtID(\d+)$/.exec(row.id || '')?.[1] || 0)));
     return `OpdrachtID${String(highest + 1).padStart(3, '0')}`;
@@ -19,10 +58,11 @@
     const row = { ...rows.find(item => item.id === selected) };
     for (const field of editor.querySelectorAll('[data-field]')) {
       const key = field.dataset.field;
-      row[key] = key === 'keywords'
-        ? field.value.split(/\r?\n/).map(value => value.trim()).filter(Boolean)
-        : field.value;
+      row[key] = field.value;
     }
+    addKeyword();
+    if (keywords.length > 6) throw new Error('Gebruik maximaal 6 trefwoorden. Verwijder eerst de extra trefwoorden.');
+    row.keywords = [...keywords];
     const knownDomains = [...editor.querySelectorAll('[name=opdrachtDomein]')];
     // Preserve legacy domains that do not have a checkbox.
     const extraDomains = (row.domein || []).filter(value => !knownDomains.some(field => field.value === value));
@@ -46,6 +86,9 @@
   function show(id) {
     selected = id;
     const row = rows.find(item => item.id === id);
+    keywords = [...(row?.keywords || [])];
+    keywordInput.value = '';
+    renderKeywords();
     const typeSelect = el('veld-type');
     typeSelect.querySelectorAll('[data-custom-type]').forEach(option => option.remove());
     if (row && ![...typeSelect.options].some(option => option.value === row.type)) {
@@ -116,17 +159,8 @@
       search.value = ''; show(id); changed(); el('veld-titel').focus();
     } catch (error) { status.textContent = error.message; }
   });
-  el('opdrachtPlakToggle').addEventListener('click', () => {
-    if (busy) return;
-    const panel = el('opdrachtPlakkenPaneel');
-    panel.hidden = !panel.hidden;
-    el('opdrachtPlakToggle').setAttribute('aria-expanded', String(!panel.hidden));
-    if (!panel.hidden) el('opdrachtPlakJson').focus();
-  });
-  function importeerTekst(text, submissionId = '') {
-    if (!text.trim()) throw new Error('Plak eerst de JSON uit de e-mail.');
-    if (text.length > 1024 * 1024) throw new Error('De JSON is te groot (maximaal 1 MB).');
-    const row = opdrachtFormaat.importeer(JSON.parse(text));
+  function importeerInzending(project, submissionId) {
+    const row = opdrachtFormaat.importeer(project);
     capture();
     row.id = allocateId();
     if (submissionId) row.inzendingId = submissionId;
@@ -138,26 +172,10 @@
     if (busy || !access) return;
     try {
       if (rows.some(row => row.inzendingId === event.detail.submissionId)) throw new Error('Deze inzending staat al in de opdrachtenlijst.');
-      importeerTekst(JSON.stringify(event.detail.project), event.detail.submissionId);
+      importeerInzending(event.detail.project, event.detail.submissionId);
       event.detail.accepted = true;
       el('veld-titel').focus();
     } catch (error) { status.textContent = error.message; }
-  });
-  el('opdrachtPlakImporteren').addEventListener('click', () => {
-    if (busy || !access) return;
-    const input = el('opdrachtPlakJson');
-    const feedback = el('opdrachtPlakStatus');
-    try {
-      importeerTekst(input.value);
-      input.value = ''; feedback.textContent = '';
-      el('opdrachtPlakkenPaneel').hidden = true;
-      el('opdrachtPlakToggle').setAttribute('aria-expanded', 'false');
-      el('veld-titel').focus();
-    } catch (error) {
-      feedback.textContent = error instanceof SyntaxError
-        ? 'Ongeldige JSON. Kopieer het volledige object uit opdracht_json, zonder de overige e-mailtekst.'
-        : error.message;
-    }
   });
   el('opdrachtVerwijderen').addEventListener('click', () => {
     if (!selected || !window.confirm(`${selected} verwijderen? Dit wordt definitief wanneer je opslaat.`)) return;
@@ -198,9 +216,6 @@
     downloadUrl = access = null; rows = []; selected = ''; dirty = false;
     el('beheerDownload').removeAttribute('href');
     open.reset(); form.reset(); index.replaceChildren(); show('');
-    el('opdrachtPlakJson').value = ''; el('opdrachtPlakStatus').textContent = '';
-    el('opdrachtPlakkenPaneel').hidden = true;
-      el('opdrachtPlakToggle').setAttribute('aria-expanded', 'false');
     form.hidden = confirmation.hidden = logout.hidden = true; open.hidden = false;
     el('beheerTitel').textContent = 'Inloggen voor beheer';
     status.textContent = 'Je bent uitgelogd.';
