@@ -12,10 +12,12 @@
     const activate = el('inboxOpslagActiveren');
     if (!status || !activate) return;
     if (storage.configured === false) {
-      status.textContent = 'Je inbox is beschikbaar. Voer cloudflare/migrate-storage-limit.sql uit in de D1-console om de opslagcontrole in te stellen.';
+      status.textContent = '';
+      status.hidden = true;
       activate.hidden = true;
       return;
     }
+    status.hidden = false;
     const gb = value => (value / 1000000000).toLocaleString('nl-NL', { maximumFractionDigits: 3 });
     el('inboxOpslagStatus').textContent = storage.ready
       ? `Documentopslag: ${gb(storage.used)} van ${gb(storage.limit)} GB gebruikt of gereserveerd.${storage.used >= storage.limit ? ' Nieuwe inzendingen zijn geblokkeerd.' : ''}`
@@ -47,9 +49,6 @@
       const result = await request(`/submissions?state=${state}&page=${page}`);
       if (generation !== session) return;
       showStorage(result.storage);
-      if (result.retentionConfigured === false && el('inboxOpslagStatus')) {
-        el('inboxOpslagStatus').textContent += ' Voer ook cloudflare/migrate-retention.sql uit voordat je inzendingen als afgehandeld markeert.';
-      }
       for (const item of result.items) {
         const card = document.createElement('article');
         card.className = 'assignment-admin-block';
@@ -93,7 +92,7 @@
               if (generation === session && error.name !== 'AbortError') message.textContent = error.message;
             } finally { download.disabled = false; }
           });
-          fileRow.append(fileName, download);
+          fileRow.append(download, fileName);
           documents.appendChild(fileRow);
         });
         const transfer = document.createElement('button');

@@ -1012,3 +1012,15 @@ body.dark-mode .home-shortcuts a:hover {
 .inbox-document button { flex-shrink: 0; }
 .inbox-review-actions { margin-top: 8px; padding-top: 18px; border-top: 1px solid var(--border); }
 @media (max-width: 600px) { #beoordelingen.inbox-section { padding: 16px; } }
+
+#beoordelingenFilter { width: auto; flex: 0 1 auto; max-width: 100%; }
+#beoordelingen .inbox-document { justify-content: flex-start; }
+#beoordelingen .inbox-document .search-reset-button,
+#beoordelingen .inbox-review-actions .search-reset-button {
+  background: var(--accent); border-color: var(--accent); color: #fff;
+}
+#beoordelingen .inbox-document .search-reset-button:hover,
+#beoordelingen .inbox-review-actions .search-reset-button:hover {
+  background: var(--accent-hover); border-color: var(--accent-hover);
+}
+#beoordelingen .search-reset-button:disabled { opacity: .55; cursor: not-allowed; }

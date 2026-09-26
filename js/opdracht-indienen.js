@@ -62,6 +62,29 @@
     }, null, 2);
   }
 
+  function maakEmail(data) {
+    const mail = new FormData();
+    const tekst = key => String(data.get(key) || '').trim();
+    for (const key of ['access_key', 'from_name', 'name', 'email']) mail.set(key, tekst(key));
+    mail.set('subject', `Nieuwe opdracht: ${tekst('titel')} — ${tekst('organisatie')}`.replace(/[\r\n]+/g, ' '));
+    const regels = [
+      `Opdracht: ${tekst('titel')}`,
+      `Organisatie: ${tekst('organisatie')}`,
+      `Locatie: ${tekst('locatie')}`,
+      `Type: ${tekst('type')} · Start: ${tekst('periode') || 'In overleg'}`,
+      tekst('telefoon') && `Telefoon: ${tekst('telefoon')}`,
+      `Contact delen: ${tekst('email_delen')}`,
+      tekst('documentlink') && `Documentlink: ${tekst('documentlink')}`,
+      tekst('document_ontvangen') && `Documenten: ${tekst('document_ontvangen')}`,
+      tekst('inzending_id') && `Inzending: ${tekst('inzending_id')}`
+    ].filter(Boolean);
+    const beschrijving = tekst('message').replace(/\r\n/g, '\n').replace(/\n[ \t]*\n(?:[ \t]*\n)*/g, '\n\n');
+    mail.set('message', `${regels.join('\n')}\n\nBeschrijving\n${beschrijving}`);
+    // Keep the email copy importable, without repeating an expanded JSON block.
+    mail.set('opdracht_json', JSON.stringify(JSON.parse(tekst('opdracht_json'))));
+    return mail;
+  }
+
   form.addEventListener('submit', async event => {
     event.preventDefault();
     if (bezig || !form.reportValidity()) return;
@@ -104,7 +127,7 @@
         const response = await fetch(form.action, {
           method: 'POST',
           headers: { Accept: 'application/json' },
-          body: data,
+          body: maakEmail(data),
           signal: controller.signal
         });
         const result = await response.json();
