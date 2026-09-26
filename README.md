@@ -85,8 +85,8 @@ Wachtwoorden staan niet in deze documentatie.
 ### Opdrachten bewerken
 
 1. Open `opdrachten-beheer.html` via Home > Beheer en log in.
-2. Links kies je een opdracht op ID, bedrijf en titel; rechts bewerk je de JSON.
-3. **Nieuwe opdracht** maakt een standaardobject. **Verwijderen** verwijdert de selectie uit de werklijst.
+2. Links kies je een opdracht op ID, bedrijf en titel; rechts pas je de gegevens aan in het formulier.
+3. **Nieuwe opdracht** maakt een nieuwe opdracht met vaste invulvelden. **Verwijderen** verwijdert de selectie uit de werklijst.
 4. Klik onderaan op **Wijzigingen opslaan** voor de volledige versleutelde download.
 5. Vervang lokaal `data/opdrachten.json`. Verwijder een eventueel nummer dat de browser aan de bestandsnaam heeft toegevoegd.
 6. Commit en push. Controleer de publicatie en log opnieuw in.
@@ -96,35 +96,14 @@ is dat je lokale versie; online is dat de gepubliceerde versie. Zet de download
 daarom eerst lokaal terug en publiceer voordat je online verder bewerkt. Bestandskoppeling is niet nodig.
 Bij een downloadprobleem kun je **Download opnieuw** gebruiken.
 
-#### JSON-format in de editor
-
-```json
-{
-  "titel": "Titel van de opdracht",
-  "bedrijf": "Organisatie",
-  "locatie": "Plaats",
-  "type": "Stage/Afstuderen",
-  "periode": "In overleg",
-  "domein": [],
-  "keywords": [],
-  "beschrijving": "Beschrijving van de opdracht",
-  "contact": "",
-  "docent": "",
-  "uploaddatum": "2026-09-24",
-  "status": "closed",
-  "id": "OpdrachtID005"
-}
-```
-
-Behoud de bestaande ID en oorspronkelijke uploaddatum. Nieuwe beheeropdrachten
-krijgen een volgnummer. `open` publiceert de opdracht voor ingelogde bezoekers;
-`closed` bewaart de opdracht zonder deze te tonen. Domeinen en trefwoorden zijn
-lijsten met teksten. Dit voorbeeld is de ontsleutelde inhoud, niet het formaat
-van het opgeslagen `data/opdrachten.json`.
+De ID wordt automatisch toegekend en blijft vast. Kies **Open** om de opdracht
+zichtbaar te maken of **Gesloten** om deze verborgen te houden. Vink een of meer
+van de zes domeinen aan en vul trefwoorden per regel in. De onderliggende JSON
+wordt automatisch opgebouwd; je hoeft deze niet zelf te bewerken.
 
 ### JSON uit een inzendmail
 
-Klik naast **Nieuwe opdracht** op **JSON uit e-mail**. Plak alleen de inhoud van
+Klik naast **Nieuwe opdracht** op **Importeren uit e-mail**. Plak alleen de inhoud van
 `opdracht_json`, van `{` tot en met `}`, en klik op **Importeren**.
 Er is geen bestand of betaald formulierabonnement nodig voor deze werkwijze.
 Elke import maakt een nieuwe opdracht met een eigen volgnummer en status `closed`.
@@ -327,8 +306,9 @@ de instelling in `js/site-instellingen.js`.
 
 ### Documenten bij inzendingen
 
-Met Cloudflare actief kunnen bedrijven kiezen tussen een beschrijving en maximaal
-twee bestanden: PDF of Word (.doc/.docx), elk maximaal 5 MB. De overige
+Beschrijving en documenten zijn beide optioneel en kunnen samen worden ingevuld.
+Met Cloudflare actief kunnen onder de beschrijving maximaal twee bestanden worden toegevoegd:
+PDF of Word (.doc/.docx), elk maximaal 5 MB. De overige
 opdracht- en contactvelden blijven verplicht waar aangegeven.
 
 Koppel de private R2-bucket `tn-stageplatform-documenten` aan de Worker met binding
@@ -350,7 +330,7 @@ D1 kan een ongekoppeld object achterlaten; controleer dit bij onderhoud.
 ### Automatisch verwijderen na zes maanden
 
 Een afgehandelde inzending wordt zes kalendermaanden na afhandelen verwijderd,
-samen met de gekoppelde R2-documenten. De dagelijkse taak verwerkt maximaal 100
+samen met de gekoppelde R2-documenten. De dagelijkse taak verwerkt maximaal 5
 inzendingen per keer; bij grotere achterstand volgen de overige op volgende dagen.
 Niet-afgehandelde inzendingen worden niet verwijderd. Terugzetten naar te beoordelen
 wist de afhandeldatum, zolang opruimen nog niet begonnen is. Opnieuw afhandelen start
@@ -378,3 +358,52 @@ uitvoering gemeld, zonder persoonsgegevens in de foutmelding.
 Dit ruimt alleen de actieve D1-inbox en bijbehorende R2-documenten op. Het wijzigt
 geen gepubliceerde opdrachten, ontvangen e-mails, lokale downloads of eventuele
 back-ups. Ongekoppelde objecten door een eerdere uploadfout vallen buiten deze taak.
+
+### Opslaggrens van 8 GB voor documenten
+
+De Worker blokkeert alle nieuwe inzendingen zodra de gebruikte of gereserveerde
+R2-opslag 8.000.000.000 bytes bereikt. Ook inzendingen zonder documenten worden dan
+geweigerd. Een upload die de grens zou overschrijden wordt vooraf geweigerd.
+Een eerder toegelaten inzending mag worden afgemaakt of opnieuw bevestigd zonder
+dubbele reservering. De bestandslimieten blijven twee bestanden van elk 5 MB.
+
+Activeren:
+
+1. Zorg dat de eerdere bewaartermijnmigratie al is uitgevoerd.
+2. Voer `cloudflare/migrate-storage-limit.sql` uit in de D1-console. Dit script
+   kan opnieuw worden uitgevoerd zonder de teller te wissen.
+3. Deploy de bijgewerkte `cloudflare/worker.mjs` en publiceer de websitebestanden.
+4. Open de inbox en klik op **Opslagcontrole activeren**. Dit telt alle bestaande
+   objecten in de gekoppelde R2-bucket, ook objecten zonder bijbehorende inzending.
+   Bij een onderbreking kun je de telling hervatten met dezelfde knop.
+5. Controleer dat de opslagstand verschijnt. Tot de telling klaar is blijven
+   nieuwe inzendingen en de automatische opruiming tijdelijk geblokkeerd.
+
+De D1-transactie reserveert de ruimte voordat R2 wordt beschreven. Daardoor kunnen
+ook gelijktijdige uploads niet samen over het budget gaan. Bij onzekere of mislukte
+uploads blijft de reservering meetellen; opnieuw proberen met dezelfde inzending
+reserveert niet dubbel. Verlaten reserveringen kunnen daardoor conservatief meer
+ruimte tellen dan werkelijk is opgeslagen en vereisen handmatig onderhoud.
+
+De opruimtaak geeft ruimte pas vrij nadat R2-verwijdering is bevestigd. De teller
+in de inbox toont gebruikt plus gereserveerd. Zodra voldoende ruimte vrijkomt,
+worden nieuwe inzendingen weer toegelaten. Het activeren van de teller wist niets.
+
+Gebruik deze bucket uitsluitend via deze Worker. Rechtstreekse uploads of
+verwijderingen in het Cloudflare-dashboard na de eerste telling worden niet
+automatisch met de teller gesynchroniseerd. Handmatig beheer vereist ook het
+bijwerken van de opslagadministratie. Verander de teller niet tijdens uploads.
+Andere buckets vallen buiten deze grens. Het is een opslaggrens voor deze website,
+geen algemene kostenlimiet voor Cloudflare of garantie voor gratis gebruik.
+
+Laat `cloudflareActief: true` staan: bij alleen Web3Forms loopt verzending buiten
+de Worker en kan deze opslagcontrole inzendingen niet blokkeren. De D1-database
+bevat alleen gegevens en de opslagadministratie; de bestanden zelf blijven in R2.
+
+### Inbox bereikbaar houden bij een update
+
+De inbox blijft leesbaar als de tabellen voor de opslagcontrole of de kolommen
+voor de bewaartermijn nog ontbreken. Na inloggen verschijnt dan welke SQL-migratie
+nodig is. Nieuwe inzendingen blijven geblokkeerd totdat de opslagcontrole is
+geconfigureerd en geactiveerd. Afhandelen is pas beschikbaar na de
+bewaartermijnmigratie. De inboxcode blijft vereist.

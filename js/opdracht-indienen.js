@@ -7,21 +7,9 @@
   if (!form) return;
   const button = document.getElementById('opdrachtVersturen');
   const status = document.getElementById('inzendingStatus');
-  const contentChoice = document.getElementById('inhoudType');
   const documentInput = document.getElementById('opdrachtDocument');
-  const descriptionInput = form.querySelector('[name="message"]');
-  document.getElementById('inhoudKeuze').hidden = !cloudflareActief;
-  function updateContentType() {
-    const upload = cloudflareActief && contentChoice.value === 'document';
-    document.getElementById('beschrijvingVeld').hidden = upload;
-    document.getElementById('documentVeld').hidden = !upload;
-    descriptionInput.disabled = upload;
-    descriptionInput.required = !upload;
-    documentInput.disabled = !upload;
-    documentInput.required = upload;
-    documentInput.setCustomValidity('');
-  }
-  contentChoice.addEventListener('change', updateContentType);
+  document.getElementById('documentVeld').hidden = !cloudflareActief;
+  documentInput.disabled = !cloudflareActief;
   documentInput.addEventListener('change', () => {
     const files = [...documentInput.files];
     const invalid = files.length > 2 || files.some(file => file.size > 5 * 1024 * 1024 || !/\.(pdf|doc|docx)$/i.test(file.name));
@@ -29,7 +17,6 @@
       ? 'Choose up to 2 PDF or Word files, no more than 5 MB each.' : 'Kies maximaal 2 PDF- of Word-bestanden, elk maximaal 5 MB.') : '');
     documentInput.reportValidity();
   });
-  updateContentType();
   let bezig = false;
   let melding = '';
   let foutdetail = '';
@@ -69,7 +56,7 @@
       periode: tekst('periode') || 'In overleg',
       domein: [],
       keywords: [],
-      beschrijving: tekst('message') || 'Document ontvangen. Voeg voor publicatie een beschrijving toe.',
+      beschrijving: tekst('message'),
       docent: '',
       status: 'closed'
     }, null, 2);
@@ -109,10 +96,11 @@
         if (files.length) {
           data.set('document_ontvangen', `${files.map(file => file.name).join(', ')} - beschikbaar in de beveiligde inbox.`);
           data.set('inzending_id', window.inzendingOntvangst.id());
-          data.set('message', 'Opdracht met documenten ingediend. Download de bestanden in de beveiligde inbox.');
+          if (!String(data.get('message') || '').trim()) data.set('message', 'Opdracht met documenten ingediend. Download de bestanden in de beveiligde inbox.');
         }
         // File attachments are not part of the free email integration.
         data.delete('document');
+        if (!String(data.get('message') || '').trim()) data.set('message', 'Opdracht ingediend zonder beschrijving of documenten.');
         const response = await fetch(form.action, {
           method: 'POST',
           headers: { Accept: 'application/json' },
@@ -125,7 +113,7 @@
         }
       }
       form.reset();
-      updateContentType();
+      documentInput.setCustomValidity('');
       window.inzendingOntvangst?.reset();
       melding = 'success';
     } catch (error) {

@@ -45,6 +45,12 @@ window.inzendingOntvangst = (() => {
         headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...body, id: attempt.id, token }) });
       const result = await response.json();
       if (!response.ok || result.success !== true) {
+        if (result.code === 'storage_full') throw new Error(document.documentElement.lang === 'en'
+          ? 'Storage is full. New projects cannot be submitted at the moment. Please try again later or contact the coordinator.'
+          : 'De opslag is vol. Er kunnen tijdelijk geen nieuwe opdrachten worden ingediend. Probeer later opnieuw of neem contact op met de coördinator.');
+        if (result.code === 'storage_not_ready') throw new Error(document.documentElement.lang === 'en'
+          ? 'Submissions are temporarily unavailable while storage is being configured.'
+          : 'Inzenden is tijdelijk niet beschikbaar terwijl de opslagcontrole wordt ingesteld.');
         throw new Error(typeof result.error === 'string' ? result.error.slice(0, 300) : `HTTP ${response.status}`);
       }
       attempt.stored = true;

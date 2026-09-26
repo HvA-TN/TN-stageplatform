@@ -52,7 +52,7 @@ function submission(input) {
   const project = {
     titel: text('titel', 200, true), bedrijf: text('organisatie', 200, true),
     locatie: text('locatie', 200, true), type, periode: text('periode', 150) || 'In overleg',
-    domein: [], keywords: [], beschrijving: text('message', 10000, !(input.document || input.documents?.length)) || 'Document ontvangen. Voeg voor publicatie een beschrijving toe.', contact: '', docent: '',
+    domein: [], keywords: [], beschrijving: text('message', 10000), contact: '', docent: '',
     status: 'closed'
   };
   const contact = { naam: text('name', 150, true), email, telefoon: text('telefoon', 50), documentlink,
@@ -82,6 +82,37 @@ async function readDocument(value) {
   return { data, hash, name, extension, type, size: data.length };
 }
 
+const storageLimit = 8000000000; // Decimal GB: 2 GB margin below 10 GB.
+async function storageStatus(env) {
+  const quota = await env.DB.prepare('SELECT used_bytes, ready, cursor FROM storage_quota WHERE id = 1').first();
+  if (!quota) throw new Error('STORAGE_NOT_READY');
+  return { used: quota.used_bytes, limit: storageLimit, ready: quota.ready === 1, cursor: quota.cursor };
+}
+async function initializeStorage(env) {
+  const status = await storageStatus(env);
+  if (status.ready) return status;
+  if (!env.DOCUMENTS) throw new Error('STORAGE_NOT_READY');
+  const page = await env.DOCUMENTS.list({ limit: 500, ...(status.cursor ? { cursor: status.cursor } : {}) });
+  const files = page.objects.map(object => ({ key: object.key, size: object.size }));
+  await env.DB.batch([
+    env.DB.prepare("INSERT OR IGNORE INTO storage_files(object_key, bytes) SELECT json_extract(value, '$.key'), json_extract(value, '$.size') FROM json_each(?)")
+      .bind(JSON.stringify(files)),
+    env.DB.prepare('UPDATE storage_quota SET ready = ?, cursor = ? WHERE id = 1 AND ready = 0 AND cursor IS ?')
+      .bind(page.truncated ? 0 : 1, page.truncated ? page.cursor : null, status.cursor)
+  ]);
+  return storageStatus(env);
+}
+async function reserveStorage(env, id, fingerprint, files) {
+  // D1 batch is atomic: capacity, identity and both files succeed together or not at all.
+  // Failed uploads retain their reservations, so uncertain R2 writes never undercount.
+  await env.DB.batch([
+    env.DB.prepare('INSERT INTO storage_receipts(id, fingerprint) VALUES (?, ?) ON CONFLICT(id) DO NOTHING')
+      .bind(id, fingerprint),
+    env.DB.prepare("INSERT OR IGNORE INTO storage_files(object_key, bytes) SELECT json_extract(value, '$.key'), json_extract(value, '$.size') FROM json_each(?)")
+      .bind(JSON.stringify(files))
+  ]);
+}
+
 function expiresAt(archivedAt) {
   const date = new Date(archivedAt);
   const day = date.getUTCDate();
@@ -94,8 +125,9 @@ function expiresAt(archivedAt) {
 
 async function cleanArchived(env, now = new Date()) {
   // Daily bounded batch; retain metadata until all R2 deletes have succeeded.
+  if (!(await storageStatus(env)).ready) return; // Finish the initial inventory before changing the bucket.
   const cutoff = new Date(now.getTime() - 180 * 86400000).toISOString();
-  const { results } = await env.DB.prepare("SELECT id, archived_at, cleanup_started_at, contact_json FROM submissions WHERE state = 'archived' AND (archived_at <= ? OR cleanup_started_at IS NOT NULL) ORDER BY archived_at, id LIMIT 100").bind(cutoff).all();
+  const { results } = await env.DB.prepare("SELECT id, archived_at, cleanup_started_at, contact_json FROM submissions WHERE state = 'archived' AND (archived_at <= ? OR cleanup_started_at IS NOT NULL) ORDER BY archived_at, id LIMIT 5").bind(cutoff).all();
   let failed = false;
   for (const row of results) {
     if (!row.cleanup_started_at && !(expiresAt(row.archived_at) <= now)) continue;
@@ -112,8 +144,12 @@ async function cleanArchived(env, now = new Date()) {
           throw new Error('Document storage unavailable or invalid key');
         }
         await env.DOCUMENTS.delete(file.key);
+        await env.DB.prepare('DELETE FROM storage_files WHERE object_key = ?').bind(file.key).run();
       }
-      await env.DB.prepare("DELETE FROM submissions WHERE id = ? AND state = 'archived' AND cleanup_started_at IS NOT NULL").bind(row.id).run();
+      await env.DB.batch([
+        env.DB.prepare("DELETE FROM submissions WHERE id = ? AND state = 'archived' AND cleanup_started_at IS NOT NULL").bind(row.id),
+        env.DB.prepare('DELETE FROM storage_receipts WHERE id = ?').bind(row.id)
+      ]);
     } catch (_) { failed = true; }
   }
   if (failed) throw new Error('Some expired submissions could not be removed; retry on the next scheduled run.');
@@ -173,6 +209,8 @@ export default {
         if (existing) return existing.payload_hash === fingerprint
           ? reply({ success: true, id: parsed.id }, 200)
           : reply({ error: 'Inzending gewijzigd. Start een nieuwe inzending.' }, 409);
+        await reserveStorage(env, parsed.id, fingerprint,
+          parsed.contact.documents || (parsed.contact.document ? [parsed.contact.document] : []));
         for (let i = 0; i < documents.length; i++) {
           const metadata = parsed.contact.documents?.[i] || parsed.contact.document;
           await env.DOCUMENTS.put(metadata.key, documents[i].data, {
@@ -194,6 +232,10 @@ export default {
           return reply({ error: 'Inbox niet goed ingesteld. Controleer de secret REVIEW_TOKEN (hoofdletters, 8 tot en met 33 tekens) en deploy de Worker opnieuw.' }, 503);
         }
         if (!await authorised(request, env)) return reply({ error: 'Geen toegang tot inzendingen.' }, 401);
+        if (request.method === 'POST' && path === '/submissions/storage/initialize') {
+          const storage = await initializeStorage(env);
+          return reply({ storage: { used: storage.used, limit: storage.limit, ready: storage.ready } });
+        }
         const documentRoute = /^\/submissions\/([0-9a-f-]{36})\/document(?:\/([01]))?$/i.exec(path);
         if (request.method === 'GET' && documentRoute) {
           const row = await env.DB.prepare('SELECT contact_json FROM submissions WHERE id = ?').bind(documentRoute[1]).first();
@@ -212,9 +254,17 @@ export default {
           const params = new URL(request.url).searchParams;
           const state = params.get('state') === 'archived' ? 'archived' : 'pending';
           const page = Math.max(0, Math.min(100000, Number(params.get('page')) || 0));
-          const { results } = await env.DB.prepare('SELECT id, created_at, project_json, contact_json, state, archived_at, cleanup_started_at FROM submissions WHERE state = ? ORDER BY created_at DESC, id LIMIT 51 OFFSET ?')
+          const { results } = await env.DB.prepare('SELECT * FROM submissions WHERE state = ? ORDER BY created_at DESC, id LIMIT 51 OFFSET ?')
             .bind(state, Math.floor(page) * 50).all();
-          return reply({ items: results.slice(0, 50).map(row => ({ id: row.id, created_at: row.created_at, state: row.state, archived_at: row.archived_at, cleanup_started_at: row.cleanup_started_at,
+          let storage;
+          try { storage = { ...await storageStatus(env), configured: true }; }
+          catch (error) {
+            const detail = String(error?.message || '') + String(error?.cause?.message || '');
+            if (!/no such table: (storage_quota|storage_files|storage_receipts)|STORAGE_NOT_READY/.test(detail)) throw error;
+            storage = { used: null, limit: storageLimit, ready: false, configured: false };
+          }
+          const retentionConfigured = await env.DB.prepare("SELECT COUNT(*) AS count FROM pragma_table_info('submissions') WHERE name IN ('archived_at', 'cleanup_started_at')").first();
+          return reply({ retentionConfigured: retentionConfigured.count === 2, storage: { used: storage.used, limit: storage.limit, ready: storage.ready, configured: storage.configured }, items: results.slice(0, 50).map(row => ({ id: row.id, created_at: row.created_at, state: row.state, archived_at: row.archived_at, cleanup_started_at: row.cleanup_started_at,
             project: JSON.parse(row.project_json), contact: JSON.parse(row.contact_json) })), more: results.length > 50 });
         }
         if (request.method === 'PATCH' && /^\/submissions\/[0-9a-f-]{36}$/i.test(path)) {
@@ -227,7 +277,13 @@ export default {
         }
       }
       return reply({ error: 'Niet gevonden.' }, 404);
-    } catch (_) {
+    } catch (error) {
+      const detail = String(error?.message || '') + String(error?.cause?.message || '');
+      if (/no such table: storage_/.test(detail)) return reply({ code: 'storage_not_ready', error: 'Voer eerst cloudflare/migrate-storage-limit.sql uit in de D1-console. De inbox blijft beschikbaar.' }, 503);
+      if (/no such column: (archived_at|cleanup_started_at)/.test(detail)) return reply({ error: 'Voer eerst cloudflare/migrate-retention.sql uit in de D1-console om de bewaartermijn in te stellen.' }, 503);
+      if (detail.includes('STORAGE_FULL')) return reply({ code: 'storage_full', error: 'De opslag is vol. Er kunnen tijdelijk geen nieuwe opdrachten worden ingediend. Probeer later opnieuw of neem contact op met de coördinator.' }, 507);
+      if (detail.includes('STORAGE_NOT_READY')) return reply({ code: 'storage_not_ready', error: 'Inzenden is tijdelijk niet beschikbaar. De beheerder moet de opslagcontrole eerst activeren.' }, 503);
+      if (detail.includes('STORAGE_CONFLICT')) return reply({ error: 'Inzending gewijzigd. Start een nieuwe inzending.' }, 409);
       return reply({ error: 'Tijdelijk niet beschikbaar. Probeer later opnieuw.' }, 503);
     }
   }

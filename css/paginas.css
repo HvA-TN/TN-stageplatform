@@ -591,6 +591,8 @@ body.dark-mode .info-card .password-error { color: #ffb4ab; }
 .info-card .inbox-login p { margin: 0; color: var(--text-soft); font-size: .85rem; }
 #beoordelingenOpenen { justify-self: start; width: auto; max-width: 100%; margin-top: 4px; }
 #beoordelingenInhoud { min-width: 0; padding-top: 20px; border-top: 1px solid var(--border); }
+#inboxOpslagActiveren { width: auto; margin-bottom: 16px; }
+#inboxOpslagActiveren[hidden] { display: none; }
 #beoordelingen .opdracht-index-actions { min-width: 0; }
 #beoordelingen .opdracht-index-actions button { max-width: 100%; white-space: normal; overflow-wrap: anywhere; }
 #beoordelingen[hidden], #beoordelingenInhoud[hidden] { display: none; }
@@ -696,11 +698,39 @@ body.dark-mode .info-card .password-error { color: #ffb4ab; }
 }
 .assignment-admin-layout #opdrachtIndex { min-height: 320px; }
 .assignment-admin-layout #opdrachtIndex option { padding: 10px 8px; }
+.assignment-admin-layout .assignment-overview {
+  align-self: stretch;
+  grid-template-rows: auto auto auto auto minmax(320px, 1fr) auto auto;
+}
+.assignment-overview #opdrachtIndex { height: 100%; }
 @media (max-width: 1000px) {
   .assignment-admin-layout { grid-template-columns: minmax(0, 1fr); }
+  .assignment-admin-layout .assignment-overview { grid-template-rows: none; }
+  .assignment-overview #opdrachtIndex { height: 260px; }
   .assignment-admin-layout #opdrachtIndex { min-height: 200px; }
 }
-.assignment-admin-block #beheerJson { line-height: 1.65; padding: 18px; }
+.assignment-fields {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 16px; border: 0; margin: 0; padding: 0; min-width: 0;
+}
+.assignment-fields legend { padding: 0; margin-bottom: 8px; font-weight: 600; }
+.assignment-field { display: grid; align-content: start; gap: 6px; min-width: 0; }
+.assignment-field small { color: var(--text-soft); font-weight: normal; }
+.assignment-field-wide { grid-column: 1 / -1; }
+.assignment-domains { min-width: 0; margin: 0; padding: 0; border: 0; }
+.assignment-domain-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.assignment-domain-options label {
+  display: flex; align-items: center; gap: 6px; padding: 8px;
+  border: 1px solid var(--border); border-radius: 8px; cursor: pointer;
+  background: var(--bg-panel); font-size: .8rem; line-height: 1.3;
+}
+.assignment-domain-options label:has(input:checked) { border-color: var(--text-heading); }
+.assignment-domain-options input[type="checkbox"] { width: 18px; height: 18px; flex: 0 0 18px; margin: 0; }
+.assignment-fields:disabled { display: none; }
+@media (max-width: 600px) {
+  .assignment-fields { grid-template-columns: minmax(0, 1fr); }
+  .assignment-domain-options { grid-template-columns: minmax(0, 1fr); }
+}
 @media (max-width: 600px) {
   .assignment-admin-block { padding: 16px; }
 }

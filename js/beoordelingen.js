@@ -6,6 +6,22 @@
   const list = el('beoordelingenLijst');
   const message = el('beoordelingenStatus');
   let token = '', page = 0, controller, busy = false, session = 0;
+  function showStorage(storage) {
+    if (!storage) return;
+    const status = el('inboxOpslagStatus');
+    const activate = el('inboxOpslagActiveren');
+    if (!status || !activate) return;
+    if (storage.configured === false) {
+      status.textContent = 'Je inbox is beschikbaar. Voer cloudflare/migrate-storage-limit.sql uit in de D1-console om de opslagcontrole in te stellen.';
+      activate.hidden = true;
+      return;
+    }
+    const gb = value => (value / 1000000000).toLocaleString('nl-NL', { maximumFractionDigits: 3 });
+    el('inboxOpslagStatus').textContent = storage.ready
+      ? `Documentopslag: ${gb(storage.used)} van ${gb(storage.limit)} GB gebruikt of gereserveerd.${storage.used >= storage.limit ? ' Nieuwe inzendingen zijn geblokkeerd.' : ''}`
+      : 'Activeer de opslagcontrole om bestaande bestanden mee te tellen. Tot die tijd zijn nieuwe inzendingen geblokkeerd.';
+    el('inboxOpslagActiveren').hidden = storage.ready;
+  }
   async function request(path, options = {}, download = false) {
     let response;
     try {
@@ -33,6 +49,10 @@
       const state = el('beoordelingenFilter').value;
       const result = await request(`/submissions?state=${state}&page=${page}`);
       if (generation !== session) return;
+      showStorage(result.storage);
+      if (result.retentionConfigured === false && el('inboxOpslagStatus')) {
+        el('inboxOpslagStatus').textContent += ' Voer ook cloudflare/migrate-retention.sql uit voordat je inzendingen als afgehandeld markeert.';
+      }
       for (const item of result.items) {
         const card = document.createElement('article');
         card.className = 'assignment-admin-block';
@@ -80,7 +100,7 @@
           }
         });
         const archive = document.createElement('button');
-        archive.disabled = Boolean(item.cleanup_started_at);
+        archive.disabled = Boolean(item.cleanup_started_at) || result.retentionConfigured === false;
         archive.type = 'button'; archive.className = 'search-reset-button';
         archive.textContent = state === 'pending' ? 'Als afgehandeld markeren' : 'Terug naar te beoordelen';
         archive.addEventListener('click', async () => {
@@ -100,6 +120,26 @@
     } catch (error) { if (generation === session && error.name !== 'AbortError') message.textContent = error.message; }
     finally { busy = false; }
   }
+  el('inboxOpslagActiveren')?.addEventListener('click', async () => {
+    if (busy) return;
+    busy = true;
+    const generation = session;
+    const button = el('inboxOpslagActiveren');
+    button.disabled = true;
+    let complete = false;
+    try {
+      do {
+        const result = await request('/submissions/storage/initialize', { method: 'POST' });
+        if (generation !== session) return;
+        complete = result.storage.ready;
+        showStorage(result.storage);
+        message.textContent = complete ? 'Opslagcontrole actief.' : 'Bestaande documenten tellen...';
+      } while (!complete);
+    } catch (error) {
+      if (generation === session && error.name !== 'AbortError') message.textContent = error.message;
+    } finally { busy = false; button.disabled = false; }
+    if (complete && generation === session) await load();
+  });
   el('beoordelingenOpenen').addEventListener('click', () => {
     if (busy) return;
     const input = el('beoordelingenToken');

@@ -31,7 +31,7 @@
           <button class="search-reset-button" type="submit">Inloggen</button>
         </form>
         <form id="beheerOpslaan" class="access-form assignment-admin-layout" hidden>
-          <section class="assignment-admin-block" aria-labelledby="opdrachtOverzichtTitel">
+          <section class="assignment-admin-block assignment-overview" aria-labelledby="opdrachtOverzichtTitel">
             <h2 id="opdrachtOverzichtTitel">Opdrachtenoverzicht</h2>
             <label for="opdrachtZoeken">Zoek op ID, titel of bedrijf</label>
             <input id="opdrachtZoeken" class="search-input" type="search" placeholder="Zoek een opdracht">
@@ -39,7 +39,7 @@
             <select id="opdrachtIndex" class="search-input" size="7"></select>
             <div class="opdracht-index-actions">
               <button id="opdrachtToevoegen" class="search-reset-button" type="button">Nieuwe opdracht</button>
-              <button id="opdrachtPlakToggle" class="search-reset-button" type="button" aria-expanded="false" aria-controls="opdrachtPlakkenPaneel">JSON uit e-mail</button>
+              <button id="opdrachtPlakToggle" class="search-reset-button" type="button" aria-expanded="false" aria-controls="opdrachtPlakkenPaneel">Importeren uit e-mail</button>
               <button id="opdrachtVerwijderen" class="search-reset-button" type="button">Verwijderen</button>
             </div>
             <div id="opdrachtPlakkenPaneel" class="assignment-paste" hidden>
@@ -54,7 +54,28 @@
               <h2 id="opdrachtBewerkenTitel">Opdracht bewerken</h2>
               <span id="opdrachtLabel" class="assignment-admin-id">Geen selectie</span>
             </div>
-            <textarea id="beheerJson" rows="22" spellcheck="false" aria-labelledby="opdrachtBewerkenTitel opdrachtLabel"></textarea>
+            <fieldset id="opdrachtVelden" class="assignment-fields" aria-labelledby="opdrachtBewerkenTitel" disabled>
+              <label class="assignment-field assignment-field-wide">Titel<input id="veld-titel" data-field="titel" class="search-input" type="text" required></label>
+              <label class="assignment-field">Bedrijf / instelling<input id="veld-bedrijf" data-field="bedrijf" class="search-input" type="text"></label>
+              <label class="assignment-field">Locatie<input id="veld-locatie" data-field="locatie" class="search-input" type="text"></label>
+              <label class="assignment-field">Type opdracht<select id="veld-type" data-field="type" class="search-input"><option value="Stage">Stage</option><option value="Afstuderen">Afstuderen</option><option value="Stage/Afstuderen">Stage/Afstuderen</option></select></label>
+              <label class="assignment-field">Startperiode<input id="veld-periode" data-field="periode" class="search-input" type="text"></label>
+              <label class="assignment-field">Uploaddatum<input id="veld-uploaddatum" data-field="uploaddatum" class="search-input" type="date"></label>
+              <label class="assignment-field">Docent<input id="veld-docent" data-field="docent" class="search-input" type="text"></label>
+              <label class="assignment-field">Contactgegevens<input id="veld-contact" data-field="contact" class="search-input" type="text"></label>
+              <label class="assignment-field">Status<select id="veld-status" data-field="status" class="search-input"><option value="closed">Gesloten</option><option value="open">Open</option></select></label>
+              <label class="assignment-field assignment-field-wide">Beschrijving<textarea id="veld-beschrijving" data-field="beschrijving" rows="6"></textarea></label>
+              <fieldset class="assignment-domains assignment-field-wide"><legend>Domeinen</legend><div class="assignment-domain-options">
+                <label><input type="checkbox" name="opdrachtDomein" value="Aarde, klimaat &amp; ruimte"><span>Aarde, klimaat &amp; ruimte</span></label>
+                <label><input type="checkbox" name="opdrachtDomein" value="Data &amp; digitalisering"><span>Data &amp; digitalisering</span></label>
+                <label><input type="checkbox" name="opdrachtDomein" value="Energie &amp; duurzaamheid"><span>Energie &amp; duurzaamheid</span></label>
+                <label><input type="checkbox" name="opdrachtDomein" value="Gezondheid &amp; medische technologie"><span>Gezondheid &amp; medische technologie</span></label>
+                <label><input type="checkbox" name="opdrachtDomein" value="High-tech systemen &amp; materialen"><span>High-tech systemen &amp; materialen</span></label>
+                <label><input type="checkbox" name="opdrachtDomein" value="Veiligheid &amp; defensie"><span>Veiligheid &amp; defensie</span></label>
+              </div></fieldset>
+              <label class="assignment-field assignment-field-wide">Trefwoorden<textarea id="veld-keywords" data-field="keywords" rows="3" aria-describedby="keywordsHint"></textarea><small id="keywordsHint">Eén trefwoord per regel.</small></label>
+            </fieldset>
+            <p id="opdrachtLeeg">Kies een opdracht of maak een nieuwe aan.</p>
           </section>
           <div class="assignment-admin-save assignment-admin-save-all">
             <button id="beheerOpslaanKnop" class="search-reset-button" type="submit">Wijzigingen opslaan</button>
@@ -74,13 +95,14 @@
           <div class="inbox-login">
             <label for="beoordelingenToken">Toegangscode inbox</label>
             <div class="password-input-row">
-              <input id="beoordelingenToken" class="search-input" type="password" autocomplete="off" minlength="8" maxlength="33" aria-describedby="inboxWachtwoordHint">
+              <input id="beoordelingenToken" class="search-input" type="password" autocomplete="off" minlength="8" maxlength="33">
               <button class="search-reset-button" type="button" data-password-toggle="beoordelingenToken" aria-controls="beoordelingenToken" aria-pressed="false">Tonen</button>
             </div>
-            <p id="inboxWachtwoordHint">Gebruik de inboxcode uit Cloudflare: 8 tot en met 33 tekens.</p>
             <button id="beoordelingenOpenen" class="search-reset-button" type="button">Inbox openen</button>
           </div>
           <div id="beoordelingenInhoud" hidden>
+            <p id="inboxOpslagStatus" role="status"></p>
+            <button id="inboxOpslagActiveren" class="search-reset-button" type="button" hidden>Opslagcontrole activeren</button>
             <p>Afgehandelde inzendingen en hun documenten worden na zes maanden automatisch verwijderd. Terugzetten naar ‘Te beoordelen’ stopt die termijn zolang de verwijdering nog niet is gestart.</p>
             <div class="opdracht-index-actions">
               <select id="beoordelingenFilter" class="search-input" aria-label="Status inzendingen">
@@ -105,7 +127,7 @@
     <script src="js/opdracht-toegang.js"></script>
     <script src="js/opdracht-crypto.js"></script>
     <script src="js/opdracht-formaat.js"></script>
-    <script src="js/beoordelingen.js"></script>
-    <script src="js/opdrachten-index.js"></script>
+    <script src="js/beoordelingen.js?v=20260926"></script>
+    <script src="js/opdrachten-index.js?v=20260926-formulier"></script>
   </body>
 </html>

@@ -1,6 +1,6 @@
 (() => {
   const el = id => document.getElementById(id);
-  const open = el('beheerOpen'), form = el('beheerOpslaan'), editor = el('beheerJson');
+  const open = el('beheerOpen'), form = el('beheerOpslaan'), editor = el('opdrachtVelden');
   const index = el('opdrachtIndex'), search = el('opdrachtZoeken'), status = el('beheerStatus');
   const confirmation = el('beheerBevestiging'), logout = el('beheerSluiten');
   let downloadUrl, access, rows = [], selected = '', dirty = false, busy = false;
@@ -16,14 +16,19 @@
   }
   function capture() {
     if (!selected) return;
-    const row = JSON.parse(editor.value);
-    if (!row || Array.isArray(row) || typeof row !== 'object') throw new Error('Gebruik één opdracht als JSON-object.');
-    if (row.id !== selected) throw new Error('De ID staat vast. Maak een nieuwe opdracht voor een nieuwe ID.');
-    if (typeof row.titel !== 'string' || !row.titel.trim()) throw new Error('Vul een titel in.');
-    if (!['open', 'closed'].includes(row.status)) throw new Error('Gebruik status open of closed.');
-    for (const key of ['domein', 'keywords']) {
-      if (!Array.isArray(row[key]) || row[key].some(value => typeof value !== 'string')) throw new Error(`${key} moet een lijst met teksten zijn.`);
+    const row = { ...rows.find(item => item.id === selected) };
+    for (const field of editor.querySelectorAll('[data-field]')) {
+      const key = field.dataset.field;
+      row[key] = key === 'keywords'
+        ? field.value.split(/\r?\n/).map(value => value.trim()).filter(Boolean)
+        : field.value;
     }
+    const knownDomains = [...editor.querySelectorAll('[name=opdrachtDomein]')];
+    // Preserve legacy domains that do not have a checkbox.
+    const extraDomains = (row.domein || []).filter(value => !knownDomains.some(field => field.value === value));
+    row.domein = [...knownDomains.filter(field => field.checked).map(field => field.value), ...extraDomains];
+    if (!row.titel.trim()) { el('veld-titel').focus(); throw new Error('Vul een titel in.'); }
+    if (!['open', 'closed'].includes(row.status)) throw new Error('Kies een geldige status.');
     rows[rows.findIndex(item => item.id === selected)] = opdrachtFormaat.orden(row);
   }
   function render() {
@@ -41,7 +46,23 @@
   function show(id) {
     selected = id;
     const row = rows.find(item => item.id === id);
-    editor.value = row ? JSON.stringify(opdrachtFormaat.orden(row), null, 2) : '';
+    const typeSelect = el('veld-type');
+    typeSelect.querySelectorAll('[data-custom-type]').forEach(option => option.remove());
+    if (row && ![...typeSelect.options].some(option => option.value === row.type)) {
+      const option = document.createElement('option');
+      option.value = row.type || '';
+      option.textContent = row.type || 'Kies een type';
+      option.dataset.customType = 'true';
+      typeSelect.appendChild(option);
+    }
+    for (const field of editor.querySelectorAll('[data-field]')) {
+      const value = row?.[field.dataset.field];
+      field.value = Array.isArray(value) ? value.join('\n') : (value ?? '');
+    }
+    for (const field of editor.querySelectorAll('[name=opdrachtDomein]')) {
+      field.checked = Boolean(row?.domein?.includes(field.value));
+    }
+    el('opdrachtLeeg').hidden = Boolean(row);
     editor.disabled = !row;
     el('opdrachtLabel').textContent = row ? id : 'Geen selectie';
     render();
@@ -92,7 +113,7 @@
       capture();
       const id = allocateId();
       rows.push({ ...opdrachtFormaat.standaard(), id, titel: 'Nieuwe opdracht' });
-      search.value = ''; show(id); changed(); editor.focus();
+      search.value = ''; show(id); changed(); el('veld-titel').focus();
     } catch (error) { status.textContent = error.message; }
   });
   el('opdrachtPlakToggle').addEventListener('click', () => {
@@ -119,7 +140,7 @@
       if (rows.some(row => row.inzendingId === event.detail.submissionId)) throw new Error('Deze inzending staat al in de opdrachtenlijst.');
       importeerTekst(JSON.stringify(event.detail.project), event.detail.submissionId);
       event.detail.accepted = true;
-      editor.focus();
+      el('veld-titel').focus();
     } catch (error) { status.textContent = error.message; }
   });
   el('opdrachtPlakImporteren').addEventListener('click', () => {
@@ -131,7 +152,7 @@
       input.value = ''; feedback.textContent = '';
       el('opdrachtPlakkenPaneel').hidden = true;
       el('opdrachtPlakToggle').setAttribute('aria-expanded', 'false');
-      editor.focus();
+      el('veld-titel').focus();
     } catch (error) {
       feedback.textContent = error instanceof SyntaxError
         ? 'Ongeldige JSON. Kopieer het volledige object uit opdracht_json, zonder de overige e-mailtekst.'
@@ -176,7 +197,7 @@
     if (downloadUrl) URL.revokeObjectURL(downloadUrl);
     downloadUrl = access = null; rows = []; selected = ''; dirty = false;
     el('beheerDownload').removeAttribute('href');
-    open.reset(); form.reset(); index.replaceChildren(); editor.value = '';
+    open.reset(); form.reset(); index.replaceChildren(); show('');
     el('opdrachtPlakJson').value = ''; el('opdrachtPlakStatus').textContent = '';
     el('opdrachtPlakkenPaneel').hidden = true;
       el('opdrachtPlakToggle').setAttribute('aria-expanded', 'false');
